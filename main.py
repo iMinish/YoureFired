@@ -197,7 +197,7 @@ def trackRects1(rects):
                         winner = "Player 1"
                         gameState = "winner"
                         winState()
-                    setupGamePlay2()
+                    setupGamePlay2() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i,j))
                     rects_clicked1.append((i,j))
@@ -211,7 +211,7 @@ def trackRects1(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clicked1)
-                    setupGamePlay2()
+                    setupGamePlay2() # Fixed fire until hit
 
 
 def trackRects2(rects):
@@ -249,7 +249,7 @@ def trackRects2(rects):
                         winner = "Player 2"
                         gameState = "winner"
                         winState()
-                    setupGamePlay1()
+                    setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clicked2:
                     rects_missed2.append((i,j))
                     rects_clicked2.append((i,j))
@@ -264,7 +264,7 @@ def trackRects2(rects):
                     pygame.display.update()
                     print(rects_clicked2)
                     pygame.time.delay(250)
-                    setupGamePlay1()
+                    setupGamePlay1() # Fixed fire until hit
 
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
@@ -519,7 +519,7 @@ def printRectsAI(rects):
                 pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
                 pygame.display.update(rects[i][j])
 
-def track_toggle() :
+def track_toggle():
     """Tracks when the toggle square is pressed by the mouse"""
 
     global toggled
@@ -634,15 +634,25 @@ def trackPlacement(rects):
             pygame.display.update(rects[i[0]][i[1]])
         spotsToCheck = []
 
-def trackPlayButton():
+def trackPlayButton(): #PLAY VS HUMAN
     """ Tracks if the Play button on the welcome screen has been pressed. If it has, setupPlaceBoats(1) is called"""
-
     global gameState
 
     if pygame.mouse.get_pressed() == (1, 0, 0):
         mouseX, mouseY = pygame.mouse.get_pos()
-        if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width*.45,disp_height*.43,120,75)) and not numberOfBoats==0:
+        if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width*.33,disp_height*.43,370,75)) and not numberOfBoats==0:
+            print("PLAY VS HUMAN CLICKED\n")
             setupPlaceBoats(1)
+
+def trackPlayButton_AI(): #PLAY VS AI
+    """ Tracks if the PLAY VS AI button on the welcome screen has been pressed. If it has, ????????????????"""
+    global gameState
+
+    if pygame.mouse.get_pressed() == (1, 0, 0):
+        mouseX, mouseY = pygame.mouse.get_pos()
+        if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width*.38,disp_height*.55,260,75)) and not numberOfBoats==0:
+            print("PLAY VS AI CLICKED\n")
+            setupPlaceBoats(1) # need to change to handle which AI we are playing against
 
 
 def getSize():
@@ -764,6 +774,7 @@ def trackQuitButton():
     if pygame.mouse.get_pressed() == (1, 0, 0):
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width*.45,disp_height*.68,120,75)):
+            print("QUIT CLICKED\n")
             quitGame()
 
 def updateBoatToPlaceText(size):
@@ -833,26 +844,37 @@ def setupWelcome():
     select_text_display=select_text.render("Select the number of boats", False, (0, 0, 0))
     disp.blit(select_text_display, (375, disp_height*.25))
 
-    TextSurf2, TextRect2 = text_objects("PLAY", medText)
-    TextSurf3, TextRect3 = text_objects("QUIT", medText)
     TextRect.center = ((disp_width/2),(disp_height*.15))
+
+    TextSurf2, TextRect2 = text_objects("PLAY VS HUMAN", medText)
     TextRect2.center = ((disp_width/2), (disp_height/2))
+
+    TextSurf6, TextRect6 = text_objects("PLAY VS AI", medText) # new code - rob
+    TextRect6.center = ((disp_width / 2), (disp_height * .6)) # new code - rob
+
+    TextSurf3, TextRect3 = text_objects("QUIT", medText)
     TextRect3.center = ((disp_width/2), (disp_height*.75))
     #makes buttons interactive
     mouse = pygame.mouse.get_pos()
-    if disp_width*.45 + 100 > mouse[0] > disp_width*.45 and disp_height*.43 + 50 > mouse[1] > disp_height*.43:
-        pygame.draw.rect(disp, white ,(disp_width*.45,disp_height*.43,120,75))
+    if disp_width*.33 + 100 > mouse[0] > disp_width*.33 and disp_height*.43 + 50 > mouse[1] > disp_height*.43:
+        pygame.draw.rect(disp, white ,(disp_width*.33,disp_height*.43,370,75)) # PLAY VS HUMAN IS CLICKABLE
+    elif disp_width*.38 + 100 > mouse[0] > disp_width*.38 and disp_height*.55 + 50 > mouse[1] > disp_height*.55:
+        pygame.draw.rect(disp, white ,(disp_width*.38,disp_height*.55,260,75)) # PLAY VS AI IS CLICKABLE
     elif disp_width*.45 + 100 > mouse[0] > disp_width*.45 and disp_height*.68 + 50 > mouse[1] > disp_height*.68:
-        pygame.draw.rect(disp, white ,(disp_width*.45,disp_height*.68,120,75))
+        pygame.draw.rect(disp, white ,(disp_width*.45,disp_height*.68,120,75)) # QUIT IS CLICKABLE
     else:
-        pygame.draw.rect(disp, l_blue ,(disp_width*.45,disp_height*.43,120,75))
-        pygame.draw.rect(disp, l_blue ,(disp_width*.45,disp_height*.68,120,75))
-        pygame.draw.rect(disp, black,(disp_width*.45,disp_height*.43,120,75),5)
-        pygame.draw.rect(disp, black,(disp_width*.45,disp_height*.68,120,75),5)
+        pygame.draw.rect(disp, l_blue ,(disp_width*.33,disp_height*.43,370,75)) #BACKGROUND of play vs human
+        pygame.draw.rect(disp, l_blue ,(disp_width*.38,disp_height*.55,260,75)) #BACKGROUND of play vs AI
+        pygame.draw.rect(disp, l_blue ,(disp_width*.45,disp_height*.68,120,75)) #BACKGROUND of QUIT
+        pygame.draw.rect(disp, black,(disp_width*.33,disp_height*.43,370,75),5) # PLAY VS HUMAN BOX
+        pygame.draw.rect(disp, black,(disp_width*.38,disp_height*.55,260,75),5) # PLAY VS AI BOX
+        pygame.draw.rect(disp, black,(disp_width*.45,disp_height*.68,120,75),5) # QUIT BOX
     TextRect.center = ((disp_width/2),(disp_height/6))
-    disp.blit(TextSurf, TextRect)
-    disp.blit(TextSurf2, TextRect2)
-    disp.blit(TextSurf3, TextRect3)
+    disp.blit(TextSurf, TextRect) # WELCOME TO BATTLEBOATS
+    disp.blit(TextSurf2, TextRect2) # PLAY VS HUMAN
+    disp.blit(TextSurf6, TextRect6) # PLAY VS AI
+    disp.blit(TextSurf3, TextRect3) # QUIT
+
     pygame.display.update()
 
 def setupPlaceBoats(whichPlayer):
@@ -999,10 +1021,12 @@ if __name__ == "__main__":
         event_handler()
         if gameState == "welcome":
             trackPlayButton()
+            trackPlayButton_AI()
             getSize()
             num_destroyed = numberOfBoats
             if numberOfBoats <= 5 and numberOfBoats > 0:
                 trackPlayButton()
+                trackPlayButton_AI()
             trackQuitButton()
 
         elif gameState == "placeBoats1":
