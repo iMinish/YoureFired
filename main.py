@@ -186,7 +186,7 @@ def trackRects1(rects):
                         winner = "Player 1"
                         gameState = "winner"
                         winState()
-                    setupGamePlay2()
+                    setupGamePlay2() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i,j))
                     print("in 2")
@@ -201,7 +201,7 @@ def trackRects1(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clicked1)
-                    setupGamePlay2()
+                    setupGamePlay2() # Fixed fire until hit
 
 
 
@@ -240,7 +240,7 @@ def trackRects2(rects):
                         winner = "Player 2"
                         gameState = "winner"
                         winState()
-                    setupGamePlay1()
+                    setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clicked2:
                     rects_missed2.append((i,j))
                     rects_clicked2.append((i,j))
@@ -255,7 +255,7 @@ def trackRects2(rects):
                     pygame.display.update()
                     print(rects_clicked2)
                     pygame.time.delay(250)
-                    setupGamePlay1()
+                    setupGamePlay1() # Fixed fire until hit
 
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
@@ -317,7 +317,7 @@ def trackRectsAI(rects, difficulty):
     elif (difficulty == "medium"):
         #to do
     elif (difficulty == "hard"):
-        
+
 
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
