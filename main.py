@@ -2,6 +2,7 @@ if __name__ == "__main__":
     import pygame
     import pygame.gfxdraw
     from pygame.locals import *
+    import random
     from boats import Boat
     from executive import Executive
     from player import Player
@@ -161,10 +162,13 @@ def trackRects1(rects):
     if pygame.mouse.get_pressed() == (1, 0, 0) and newPress:
         newPress = False
         mouseX, mouseY = pygame.mouse.get_pos()
+        print("mouse X: ", mouseX)
+        print("mouse Y: ", mouseY)
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i,j) in opposing_ship1 and not (i,j) in rects_clicked1: #clicked on square containing ship
                     rects_hit1.append((i,j))
+                    print("in 1")
                     player2.addToHitList(i,j)
                     rects_clicked1.append((i,j))
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
@@ -182,8 +186,10 @@ def trackRects1(rects):
                         winner = "Player 1"
                         gameState = "winner"
                         winState()
+                    setupGamePlay2()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i,j))
+                    print("in 2")
                     rects_clicked1.append((i,j))
                     pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
                     pygame.display.update(rects[i][j])
@@ -234,6 +240,7 @@ def trackRects2(rects):
                         winner = "Player 2"
                         gameState = "winner"
                         winState()
+                    setupGamePlay1()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clicked2:
                     rects_missed2.append((i,j))
                     rects_clicked2.append((i,j))
@@ -249,6 +256,68 @@ def trackRects2(rects):
                     print(rects_clicked2)
                     pygame.time.delay(250)
                     setupGamePlay1()
+
+
+    elif pygame.mouse.get_pressed() != (1, 0, 0):
+        newPress = True
+
+def trackRectsAI(rects, difficulty):
+    """Allows the AI to fire
+
+    Args:
+        rects (8x8 array of pygame.Rect objects): the grid to check on
+        difficulty (string): difficulty setting for AI
+    """
+    global winner
+    newPress = True
+    mouseX = 0
+    mouseY = 0
+    hit_text=pygame.font.SysFont('Consolas', 40)
+
+    if (difficulty == "easy"):
+        xCoord = random.randint(0,8)
+        yCoord = random.randint(0,8)
+        for i in range(0,8):
+            for j in range(0,8):
+                if (xCoord,yCoord) in opposing_ship2 and not (xCoord,yCoord) in rects_clicked2:
+                    rects_hit2.append((i,j))
+                    player1.addToHitList(i,j)
+                    rects_clicked2.append((i,j))
+                    pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
+                    pygame.display.update(rects[i][j])
+                    hit_text_display=hit_text.render("HIT!", False, (255, 0, 0))
+                    disp.blit(hit_text_display, (480, 540))
+                    pygame.display.update()
+                    pygame.time.delay(500)
+                    hit_text_display=hit_text.render("HIT!", False, (192, 192, 192))
+                    disp.blit(hit_text_display, (480, 540))
+                    pygame.display.update()
+                    print(rects_clicked2)
+                    print("destroyed", player2.shipsDestroyed())
+                    if player1.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 2"
+                        gameState = "winner"
+                        winState()
+                    setupGamePlay1()
+                elif not (xCoord,yCoord) in rects_clicked2:
+                    rects_missed2.append((i,j))
+                    rects_clicked2.append((i,j))
+                    pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
+                    pygame.display.update(rects[i][j])
+                    hit_text_display=hit_text.render("MISS!", False, (0, 0, 255))
+                    disp.blit(hit_text_display, (480, 540))
+                    pygame.display.update()
+                    pygame.time.delay(500)
+                    hit_text_display=hit_text.render("MISS!", False, (192, 192, 192))
+                    disp.blit(hit_text_display, (480, 540))
+                    pygame.display.update()
+                    print(rects_clicked2)
+                    pygame.time.delay(250)
+                    setupGamePlay1()
+    elif (difficulty == "medium"):
+        #to do
+    elif (difficulty == "hard"):
+        
 
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
