@@ -198,7 +198,7 @@ def trackRects1(rects):
                     setupGamePlay2()
 
 
-
+#make changes for AI here 
 def trackRects2(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 2
 
