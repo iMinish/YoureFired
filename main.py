@@ -162,10 +162,6 @@ def showboat2(rects):
                 pygame.display.update(rects[i][j])
 
 
-def fireAdjacent(shipHitsAI):
-    #for i in range(0, shipHitAI.length):
-    length = shipHitsAI.length
-
 def trackRects1(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 1
 
@@ -218,7 +214,6 @@ def trackRects1(rects):
                     setupGamePlay2()
 
 
-#make changes for AI here
 def trackRects2(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 2
 
@@ -327,6 +322,11 @@ def trackRectsHuman(rects):
                     print(rects_clickedHuman)
                     setupGamePlayAI()
 
+def fireAdjacent(shipHitsAI):
+    #for i in range(0, shipHitAI.length):
+    length = shipHitsAI.length
+
+    
 def trackRectsAI(rects, difficulty):
     """Allows the AI to fire
 
