@@ -902,6 +902,36 @@ def setupPlaceBoats(whichPlayer):
     pygame.time.delay(100)
     gameState = "placeBoats" + str(whichPlayer)
 
+def setupPlaceBoatsHuman():
+    """ Sets up initial graphics and variables for the placeBoats state for Human in human vs AI
+
+    Args:
+        None
+    """
+
+    global gameState
+    global grid
+    global placeNumber
+    global spotsToCheck
+
+    placeNumber = 1
+    spotsToCheck = []
+    disp.fill((192, 192, 192))
+
+    font = pygame.font.SysFont("Times New Roman", 40)
+    text = font.render("Player " + "Human" + ": " + "Place your " + str(numberOfBoats) + " boats", True, (0, 0, 0))
+    disp.blit(text, (350, 100))
+
+    updateBoatToPlaceText(1)
+
+    grid = createRects(350, 200)
+
+    pygame.display.update()
+    pygame.time.delay(100)
+    gameState = "placeBoatsHuman"
+
+def setupPlaceBoatsAI():
+    #to do, place AI boats
 
 def setupGamePlay1():
     """ Sets up initial graphics and variables for the gamePlay state """
@@ -995,6 +1025,9 @@ def setupGamePlay2():
     rightGrid = createRects(500, 200)
     gameState = "gamePlay2"
 
+def setupGamePlay1():
+    #to do
+
 def winState():
     """ Lets the player know that they won """
     l_blue = (80, 171, 250)
@@ -1040,6 +1073,15 @@ if __name__ == "__main__":
             else:
                 gameState = "None"
                 setupGamePlay1()
+
+        elif gameState == "placeBoatsHuman":
+            if placeNumber <= numberOfBoats:
+                trackPlacement(grid)
+            else:
+                gameState = "None"
+                turn +=1
+                setupPlaceBoatsAI()
+                setupGamePlayHuman()
 
         elif gameState == "gamePlay1":
             if player2.shipsDestroyed() == num_destroyed:
