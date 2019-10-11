@@ -955,6 +955,7 @@ def setupPlaceBoatsHuman():
 
 def setupPlaceBoatsAI():
     #to do, place AI boats
+    print("TO DO, ")
 
 def setupGamePlay1():
     """ Sets up initial graphics and variables for the gamePlay state """
@@ -1050,6 +1051,7 @@ def setupGamePlay2():
 
 def setupGamePlay1():
     #to do
+    print("to do,")
 
 def winState():
     """ Lets the player know that they won """
