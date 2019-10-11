@@ -955,11 +955,7 @@ def setupPlaceBoatsHuman():
 
 def setupPlaceBoatsAI():
     #to do, place AI boats
-<<<<<<< HEAD
-    print("TO DO, ")
-=======
     print("TO DO, PLACE AI BOATS\n")
->>>>>>> 5586489a652d661680eb9f101c41e8e637af954f
 
 def setupGamePlay1():
     """ Sets up initial graphics and variables for the gamePlay state """
