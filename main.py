@@ -1049,10 +1049,6 @@ def setupGamePlay2():
     rightGrid = createRects(500, 200)
     gameState = "gamePlay2"
 
-def setupGamePlay1():
-    #to do
-    print("TO DO\n")
-
 def winState():
     """ Lets the player know that they won """
     l_blue = (80, 171, 250)
