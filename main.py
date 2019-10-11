@@ -47,7 +47,7 @@ if __name__ == "__main__":
     #game = Executive()
 
     board_cleared = True
-    
+
     #globals for AI in human vs AI
     rects_clickedAI = []
     rects_missedAI = []
