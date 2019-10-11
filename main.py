@@ -47,7 +47,7 @@ if __name__ == "__main__":
     #game = Executive()
 
     board_cleared = True
-    
+
     #globals for AI in human vs AI
     rects_clickedAI = []
     rects_missedAI = []
@@ -955,6 +955,7 @@ def setupPlaceBoatsHuman():
 
 def setupPlaceBoatsAI():
     #to do, place AI boats
+    print("TO DO, PLACE AI BOATS\n")
 
 def setupGamePlay1():
     """ Sets up initial graphics and variables for the gamePlay state """
@@ -1050,6 +1051,7 @@ def setupGamePlay2():
 
 def setupGamePlay1():
     #to do
+    print("TO DO\n")
 
 def winState():
     """ Lets the player know that they won """
