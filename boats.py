@@ -1,5 +1,5 @@
 class Boat:
-    def __init__(self, size=1, coordinates=[]):
+    def __init__(self, size = 1, coordinates = []):
         self.size = size
         self.coordinates = coordinates
         self.destroyed = False
@@ -17,33 +17,33 @@ class Boat:
             for i in range(0, len(coordinates)):
                 check = False #if true, program won't accidentally check the second condition
                 if i != (len(coordinates) - 1):
-                    if (coordinates[i][0] != coordinates[i+1][0]):
-                        print(1, coordinates[i][0], coordinates[i+1][0])
-                        if (coordinates[i][1] != coordinates[i+1][1]):
-                            print(2, coordinates[i][1], coordinates[i+1][1])
+                    if (coordinates[i][0] != coordinates[i + 1][0]):
+                        print(1, coordinates[i][0], coordinates[i + 1][0])
+                        if (coordinates[i][1] != coordinates[i + 1][1]):
+                            print(2, coordinates[i][1], coordinates[i + 1][1])
                             return False
                 else:
-                    if (coordinates[i][0] != coordinates[i-1][0]):
-                        print(3, coordinates[i][0], coordinates[i-1][0])
-                        if (coordinates[i][1] != coordinates[i-1][1]):
-                            print(4, coordinates[i][1], coordinates[i-1][1])
+                    if (coordinates[i][0] != coordinates[i - 1][0]):
+                        print(3, coordinates[i][0], coordinates[i - 1][0])
+                        if (coordinates[i][1] != coordinates[i - 1][1]):
+                            print(4, coordinates[i][1], coordinates[i - 1][1])
                             return False
-            print("k")
+            print("k") #WHAT IS THIS FOR?
             if coordinates[0][0] == coordinates[1][0]:
                 for i in range(len(coordinates)):
-                    if i != len(coordinates)-1:
-                        if abs(coordinates[i+1][1] - coordinates[i][1]) != 1:
+                    if i != len(coordinates) - 1:
+                        if abs(coordinates[i + 1][1] - coordinates[i][1]) != 1:
                             return False
                     else:
-                        if abs(coordinates[i][1] - coordinates[i-1][1]) != 1:
+                        if abs(coordinates[i][1] - coordinates[i - 1][1]) != 1:
                             return False
             elif coordinates[0][1] == coordinates[1][1]:
                 for i in range(len(coordinates)):
-                    if i != len(coordinates)-1:
-                        if abs(coordinates[i+1][0] - coordinates[i][0]) != 1:
+                    if i != len(coordinates) - 1:
+                        if abs(coordinates[i + 1][0] - coordinates[i][0]) != 1:
                             return False
                     else:
-                        if abs(coordinates[i][0] - coordinates[i-1][0]) != 1:
+                        if abs(coordinates[i][0] - coordinates[i - 1][0]) != 1:
                             return False
         else:
             if coordinates[0][0] < 0 or coordinates[0][0] >= 8 or coordinates[0][1] < 0 or coordinates[0][1] >= 8:

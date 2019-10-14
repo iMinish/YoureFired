@@ -21,7 +21,7 @@ totalMissedAI = 0
 if __name__ == "__main__":
     import pygame
     import pygame.gfxdraw
-    import math 
+    import math
     from pygame.locals import *
     import random
     from boats import Boat
@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
     disp_width = 1080
     disp_height = 720
+
     #globals
     disp = pygame.display.set_mode((disp_width, disp_height))
     disp.fill((192, 192, 192))
@@ -182,22 +183,22 @@ def showboat2(rects):
                 pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
 
-
-
 def trackRects1(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 1
 
     Args:
         rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
+
     global winner
     newPress = True
     mouseX = 0
     mouseY = 0
+
     #scoreboard global variables
-    global totalAttackPlayer1 
-    global totalhitPlayer1 
-    global totalMissedPlayer1 
+    global totalAttackPlayer1
+    global totalhitPlayer1
+    global totalMissedPlayer1
     hit_text = pygame.font.SysFont('Consolas', 40)
     if pygame.mouse.get_pressed() == (1, 0, 0) and newPress:
         newPress = False
@@ -206,7 +207,8 @@ def trackRects1(rects):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_ship1 and not (i, j) in rects_clicked1: #clicked on square containing ship
                     rects_hit1.append((i, j))
-                    print("in 1")
+                    #print("in 1")
+                    print("Player1 hit a ship!") #TESTER COMMENT
                     player2.addToHitList(i, j)
                     rects_clicked1.append((i, j))
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
@@ -219,7 +221,7 @@ def trackRects1(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clicked1)
-                    print("destroyed", player1.shipsDestroyed())
+                    print("destroyed", player1.shipsDestroyed()) # NOT SURE IF THIS IS UPDATING CORRECTLY
                     #scoreboard total attacked update
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total hit update
@@ -231,7 +233,8 @@ def trackRects1(rects):
                     setupGamePlay2() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i, j))
-                    print("in 2")
+                    #print("in 2")
+                    print("Player1 missed!") #TESTER COMMENT
                     rects_clicked1.append((i, j))
                     pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
                     pygame.display.update(rects[i][j])
@@ -255,6 +258,7 @@ def trackRects2(rects):
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
+
     global winner
     newPress = True
     mouseX = 0
@@ -320,6 +324,7 @@ def trackRectsHuman(rects):
     Args:
         rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
+
     global winner
     newPress = True
     mouseX = 0
@@ -327,23 +332,23 @@ def trackRectsHuman(rects):
     global totalAttackHuman
     global totalhitHuman
     global totalMissedHuman
-    hit_text=pygame.font.SysFont('Consolas', 40)
+    hit_text = pygame.font.SysFont('Consolas', 40)
     if pygame.mouse.get_pressed() == (1, 0, 0) and newPress:
         newPress = False
         mouseX, mouseY = pygame.mouse.get_pos()
         for i in range(0, 8):
             for j in range(0, 8):
-                if isPointInRect(mouseX, mouseY, rects[i][j]) and (i,j) in opposing_shipHuman and not (i,j) in rects_clickedHuman: #clicked on square containing ship
-                    rects_hitHuman.append((i,j))
-                    playerAI.addToHitList(i,j)
-                    rects_clickedHuman.append((i,j))
+                if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_shipHuman and not (i, j) in rects_clickedHuman: #clicked on square containing ship
+                    rects_hitHuman.append((i, j))
+                    playerAI.addToHitList(i, j)
+                    rects_clickedHuman.append((i, j))
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
-                    hit_text_display=hit_text.render("HIT!", False, (255, 0, 0))
+                    hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     pygame.time.delay(500)
-                    hit_text_display=hit_text.render("HIT!", False, (192, 192, 192))
+                    hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clickedHuman)
@@ -351,23 +356,23 @@ def trackRectsHuman(rects):
                     #scoreBoard total attacked update
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total hit update
-                    totalhitHuman    = totalhitHuman    + 1
+                    totalhitHuman = totalhitHuman + 1
                     if playerAI.shipsDestroyed() == numberOfBoats:
                         winner = "Player Human"
                         gameState = "winner"
                         winState()
                     setupGamePlayAI()
-                elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i,j) in rects_clickedHuman: #clicked on a square and missed
-                    rects_missedHuman.append((i,j))
+                elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clickedHuman: #clicked on a square and missed
+                    rects_missedHuman.append((i, j))
                     print("in 2")
-                    rects_clickedHuman.append((i,j))
+                    rects_clickedHuman.append((i, j))
                     pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
                     pygame.display.update(rects[i][j])
-                    hit_text_display=hit_text.render("MISS!", False, (0, 0, 255))
+                    hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     pygame.time.delay(500)
-                    hit_text_display=hit_text.render("MISS!", False, (192, 192, 192))
+                    hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clickedHuman)
@@ -375,7 +380,7 @@ def trackRectsHuman(rects):
                     #scoreBoard total attacked update
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total Missed update
-                    totalMissedHuman = totalMissedHuman + 1   
+                    totalMissedHuman = totalMissedHuman + 1
 
 def trackRectsAI(rects, difficulty):
     """Allows the AI to fire
@@ -384,16 +389,15 @@ def trackRectsAI(rects, difficulty):
         rects (8x8 array of pygame.Rect objects): the grid to check on
         difficulty (string): difficulty setting for AI
     """
+
     global winner
     newPress = True
     mouseX = 0
     mouseY = 0
-    #scoreboard variables for AI 
+    #scoreboard variables for AI
     global totalAttackAI
     global totalhitAI
     global totalMissedAI
-
-
 
     hit_text = pygame.font.SysFont('Consolas', 40)
 
@@ -420,7 +424,7 @@ def trackRectsAI(rects, difficulty):
                     #scoreBoard total attacked update
                     totalAttackAI = totalAttackAI + 1
                     #scoreBoard total hit update
-                    totalhitAI    = totalhitAI   + 1
+                    totalhitAI = totalhitAI + 1
                     if playerHuman.shipsDestroyed() == numberOfBoats:
                         winner = "Player AI"
                         gameState = "winner"
@@ -435,7 +439,7 @@ def trackRectsAI(rects, difficulty):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     pygame.time.delay(500)
-                    hit_text_display=hit_text.render("MISS!", False, (192, 192, 192))
+                    hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clickedAI)
@@ -444,31 +448,31 @@ def trackRectsAI(rects, difficulty):
                     #scoreBoard total attacked update
                     totalAttackAI = totalAttackAI + 1
                     #scoreBoard total Missed update
-                    totalMissedAI = totalMissedAI + 1  
+                    totalMissedAI = totalMissedAI + 1
     elif (difficulty == "medium"):
         if (not shipHitsAI):
             xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
-            for i in range(0,8):
-                for j in range(0,8):
-                    if (xCoord,yCoord) in opposing_shipAI and not (xCoord,yCoord) in rects_clickedAI:
-                        rects_hitAI.append((i,j))
-                        playerHuman.addToHitList(i,j)
-                        rects_clickedAI.append((i,j))
+            for i in range(0, 8):
+                for j in range(0, 8):
+                    if (xCoord, yCoord) in opposing_shipAI and not (xCoord, yCoord) in rects_clickedAI:
+                        rects_hitAI.append((i, j))
+                        playerHuman.addToHitList(i, j)
+                        rects_clickedAI.append((i, j))
                         pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                         pygame.display.update(rects[i][j])
-                        hit_text_display=hit_text.render("HIT!", False, (255, 0, 0))
+                        hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
                         disp.blit(hit_text_display, (480, 540))
                         pygame.display.update()
                         pygame.time.delay(500)
-                        hit_text_display=hit_text.render("HIT!", False, (192, 192, 192))
+                        hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
                         disp.blit(hit_text_display, (480, 540))
                         pygame.display.update()
                         print(rects_clickedAI)
                         print("destroyed", playerAI.shipsDestroyed())
                         #scoreBoard total attacked update
-                        totalAttackAI= totalAttackAI + 1
+                        totalAttackAI = totalAttackAI + 1
                         #scoreBoard total hit update
-                        totalhitAI   = totalhitAI + 1
+                        totalhitAI = totalhitAI + 1
                         if playerHuman.shipsDestroyed() == numberOfBoats:
                             winner = "Player AI"
                             gameState = "winner"
@@ -479,16 +483,16 @@ def trackRectsAI(rects, difficulty):
                         #else, add coord to global list
                         setupGamePlayHuman()
 
-                    elif not (xCoord,yCoord) in rects_clickedAI:
-                        rects_missedAI.append((i,j))
-                        rects_clickedAI.append((i,j))
+                    elif not (xCoord, yCoord) in rects_clickedAI:
+                        rects_missedAI.append((i, j))
+                        rects_clickedAI.append((i, j))
                         pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
                         pygame.display.update(rects[i][j])
-                        hit_text_display=hit_text.render("MISS!", False, (0, 0, 255))
+                        hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
                         disp.blit(hit_text_display, (480, 540))
                         pygame.display.update()
                         pygame.time.delay(500)
-                        hit_text_display=hit_text.render("MISS!", False, (192, 192, 192))
+                        hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
                         disp.blit(hit_text_display, (480, 540))
                         pygame.display.update()
                         print(rects_clickedAI)
@@ -497,24 +501,24 @@ def trackRectsAI(rects, difficulty):
                         #scoreBoard total attacked update
                         totalAttackAI= totalAttackAI + 1
                         #scoreBoard total Missed update
-                        totalMissedAI = totalMissedAI + 1 
+                        totalMissedAI = totalMissedAI + 1
         else:
-            xCoord = random.randint(0,8)
-            yCoord = random.randint(0,8)
+            xCoord = random.randint(0, 8)
+            yCoord = random.randint(0, 8)
             #if hit, add coordinate to global list
     elif (difficulty == "hard"):
-        for (x,y) in opposing_ship2:
-            if (not (x,y) in rects_clickedAI):
-                rects_hit2.append((i,j))
-                playerHuman.addToHitList(i,j)
-                rects_clickedAI.append((i,j))
+        for (x, y) in opposing_ship2:
+            if (not (x, y) in rects_clickedAI):
+                rects_hit2.append((i, j))
+                playerHuman.addToHitList(i, j)
+                rects_clickedAI.append((i, j))
                 pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
-                hit_text_display=hit_text.render("HIT!", False, (255, 0, 0))
+                hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
                 disp.blit(hit_text_display, (480, 540))
                 pygame.display.update()
                 pygame.time.delay(500)
-                hit_text_display=hit_text.render("HIT!", False, (192, 192, 192))
+                hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
                 disp.blit(hit_text_display, (480, 540))
                 pygame.display.update()
                 print(rects_clickedAI)
@@ -522,7 +526,7 @@ def trackRectsAI(rects, difficulty):
                 #scoreBoard total attacked update
                 totalAttackAI = totalAttackAI + 1
                 #scoreBoard total hit update
-                totalhitAI    = totalhitAI + 1
+                totalhitAI = totalhitAI + 1
                 if playerHuman.shipsDestroyed() == numberOfBoats:
                     winner = "Player AI"
                     gameState = "winner"
@@ -540,9 +544,9 @@ def printRects1(rects):
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
 
-    for i in range(0,8):
-        for j in range(0,8):
-            if (i,j) in rects_hit1:
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (i, j) in rects_hit1:
                 pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
             if (i, j) in rects_missed1:
@@ -556,9 +560,9 @@ def printRects2(rects):
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
 
-    for i in range(0,8):
-        for j in range(0,8):
-            if (i,j) in rects_hit2:
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (i, j) in rects_hit2:
                 pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
             if (i, j) in rects_missed2:
@@ -572,9 +576,9 @@ def printRectsHuman(rects):
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
 
-    for i in range(0,8):
-        for j in range(0,8):
-            if (i,j) in rects_hitHuman:
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (i, j) in rects_hitHuman:
                 pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
             if (i, j) in rects_missedHuman:
@@ -588,9 +592,9 @@ def printRectsAI(rects):
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
 
-    for i in range(0,8):
-        for j in range(0,8):
-            if (i,j) in rects_hitAI:
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (i, j) in rects_hitAI:
                 pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
             if (i, j) in rects_missedAI:
@@ -605,20 +609,19 @@ def track_toggle():
     mouseX = 0
     mouseY = 0
 
-
     if pygame.mouse.get_pressed() == (1, 0, 0) and newPress:
         newPress = False
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(533, 200, 15, 15)):
             if not toggled:
-                checkbox=pygame.draw.rect(disp, (0, 0, 0), (533, 200, 15, 15))
+                checkbox = pygame.draw.rect(disp, (0, 0, 0), (533, 200, 15, 15))
                 pygame.display.update(pygame.Rect(533, 200, 15, 15))
-                toggled=True
+                toggled = True
                 pygame.time.delay(250)
             else:
-                checkbox=pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
+                checkbox = pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
                 pygame.display.update(pygame.Rect(533, 200, 15, 15))
-                toggled=False
+                toggled = False
                 pygame.time.delay(250)
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
@@ -630,6 +633,7 @@ def clear_board(rects):
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
+
     for i in range(0, 8):
         for j in range(0, 8):
             pygame.draw.rect(disp, (192, 192, 192), rects[i][j])
@@ -641,6 +645,7 @@ def trackPlacement(rects):
     Args:
         rects (8x8 array of pygame.Rect objects): grid to check on
     """
+
     global turn
     global placeNumber
     global spotsToCheck
@@ -705,7 +710,6 @@ def trackPlacement(rects):
                     pygame.display.update(rects[i[0]][i[1]])
         spotsToCheck = []
     elif len(spotsToCheck) != placeNumber:
-
         for i in spotsToCheck:
             pygame.draw.rect(disp, (192, 192, 192), rects[i[0]][i[1]])
             pygame.draw.rect(disp, (0, 0, 0), rects[i[0]][i[1]], 2)
@@ -823,13 +827,13 @@ def getSize():
             TextSurf4, TextRect4 = text_objects("4", largeText)
             TextSurf5, TextRect5 = text_objects("5", largeText)
             pygame.display.update()
-        elif isPointInRect(mouseX, mouseY, pygame.Rect(disp_width*.33+255,disp_height*.30,70,70)):
+        elif isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .33 + 255, disp_height * .30, 70, 70)):
             numberOfBoats = 4
-            pygame.draw.rect(disp, black ,(disp_width*.33 ,disp_height*.30, 70,70))
-            pygame.draw.rect(disp, black ,(disp_width*.33 + 85,disp_height*.30, 70,70))
-            pygame.draw.rect(disp, black ,(disp_width*.33 + 170,disp_height*.30, 70,70))
-            pygame.draw.rect(disp, green ,(disp_width*.33 + 255,disp_height*.30, 70,70))
-            pygame.draw.rect(disp, black ,(disp_width*.33 + 340,disp_height*.30, 70,70))
+            pygame.draw.rect(disp, black, (disp_width * .33 , disp_height * .30, 70, 70))
+            pygame.draw.rect(disp, black, (disp_width * .33 + 85, disp_height * .30, 70, 70))
+            pygame.draw.rect(disp, black, (disp_width * .33 + 170, disp_height * .30, 70, 70))
+            pygame.draw.rect(disp, green, (disp_width * .33 + 255, disp_height * .30, 70, 70))
+            pygame.draw.rect(disp, black, (disp_width * .33 + 340, disp_height * .30, 70, 70))
             TextSurf, TextRect = text_objects("1", largeText)
             TextSurf2, TextRect2 = text_objects("2", largeText)
             TextSurf3, TextRect3 = text_objects("3", largeText)
@@ -949,27 +953,27 @@ def setupWelcome():
     #makes buttons interactive
     mouse = pygame.mouse.get_pos()
     if disp_width * .33 + 100 > mouse[0] > disp_width * .33 and disp_height * .43 + 50 > mouse[1] > disp_height * .43: # PLAY VS HUMAN IS CLICKABLE
-        pygame.draw.rect(disp, white ,(disp_width*.33,disp_height*.43,370,75))
+        pygame.draw.rect(disp, white, (disp_width * .33, disp_height * .43, 370, 75))
     elif disp_width * .08 + 100 > mouse[0] > disp_width * .08 and disp_height * .55 + 50 > mouse[1] > disp_height * .55: # PLAY VS EASY AI IS CLICKABLE
-        pygame.draw.rect(disp, white ,(disp_width*.08,disp_height*.55,260,75))
-    elif disp_width * .35 + 100 > mouse[0] > disp_width*.35 and disp_height*.55 + 50 > mouse[1] > disp_height*.55: # PLAY VS MEDIUM AI IS CLICKABLE
-        pygame.draw.rect(disp, white ,(disp_width*.35,disp_height*.55,330,75))
-    elif disp_width * .7 + 100 > mouse[0] > disp_width*.7 and disp_height*.55 + 50 > mouse[1] > disp_height*.55: # PLAY VS HARD AI IS CLICKABLE
-        pygame.draw.rect(disp, white ,(disp_width*.7,disp_height*.55,270,75))
-    elif disp_width * .45 + 100 > mouse[0] > disp_width * .45 and disp_height*.68 + 50 > mouse[1] > disp_height*.68: # QUIT IS CLICKABLE
-        pygame.draw.rect(disp, white ,(disp_width*.45,disp_height*.68,120,75))
+        pygame.draw.rect(disp, white, (disp_width * .08, disp_height * .55, 260, 75))
+    elif disp_width * .35 + 100 > mouse[0] > disp_width * .35 and disp_height * .55 + 50 > mouse[1] > disp_height * .55: # PLAY VS MEDIUM AI IS CLICKABLE
+        pygame.draw.rect(disp, white, (disp_width * .35, disp_height * .55, 330, 75))
+    elif disp_width * .7 + 100 > mouse[0] > disp_width * .7 and disp_height * .55 + 50 > mouse[1] > disp_height * .55: # PLAY VS HARD AI IS CLICKABLE
+        pygame.draw.rect(disp, white, (disp_width * .7, disp_height * .55, 270, 75))
+    elif disp_width * .45 + 100 > mouse[0] > disp_width * .45 and disp_height * .68 + 50 > mouse[1] > disp_height * .68: # QUIT IS CLICKABLE
+        pygame.draw.rect(disp, white, (disp_width * .45, disp_height * .68, 120, 75))
     else:
-        pygame.draw.rect(disp, l_blue ,(disp_width*.33,disp_height*.43,370,75)) #BACKGROUND of PLAY VS HUMAN
-        pygame.draw.rect(disp, l_blue ,(disp_width*.08,disp_height*.55,260,75)) #BACKGROUND of PLAY VS EASY AI
-        pygame.draw.rect(disp, l_blue ,(disp_width*.35,disp_height*.55,330,75)) #BACKGROUND of PLAY VS MEDIUM AI
-        pygame.draw.rect(disp, l_blue ,(disp_width*.7,disp_height*.55,270,75)) #BACKGROUND of PLAY VS HARD AI
-        pygame.draw.rect(disp, l_blue ,(disp_width*.45,disp_height*.68,120,75)) #BACKGROUND of QUIT
-        pygame.draw.rect(disp, black,(disp_width*.33,disp_height*.43,370,75),5) # PLAY VS HUMAN BOX
-        pygame.draw.rect(disp, black,(disp_width*.08,disp_height*.55,260,75),5) # PLAY VS EASY AI BOX
-        pygame.draw.rect(disp, black,(disp_width*.35,disp_height*.55,330,75),5) # PLAY VS MEDIUM AI BOX
-        pygame.draw.rect(disp, black,(disp_width*.7,disp_height*.55,270,75),5) # PLAY VS HARD AI BOX
-        pygame.draw.rect(disp, black,(disp_width*.45,disp_height*.68,120,75),5) # QUIT BOX
-    TextRect.center = ((disp_width/2),(disp_height/6))
+        pygame.draw.rect(disp, l_blue, (disp_width * .33, disp_height * .43, 370, 75)) #BACKGROUND of PLAY VS HUMAN
+        pygame.draw.rect(disp, l_blue, (disp_width * .08, disp_height * .55, 260, 75)) #BACKGROUND of PLAY VS EASY AI
+        pygame.draw.rect(disp, l_blue, (disp_width * .35, disp_height * .55, 330, 75)) #BACKGROUND of PLAY VS MEDIUM AI
+        pygame.draw.rect(disp, l_blue, (disp_width * .7, disp_height * .55, 270, 75)) #BACKGROUND of PLAY VS HARD AI
+        pygame.draw.rect(disp, l_blue, (disp_width * .45, disp_height * .68, 120, 75)) #BACKGROUND of QUIT
+        pygame.draw.rect(disp, black, (disp_width * .33, disp_height * .43, 370, 75), 5) # PLAY VS HUMAN BOX
+        pygame.draw.rect(disp, black, (disp_width * .08, disp_height * .55, 260, 75), 5) # PLAY VS EASY AI BOX
+        pygame.draw.rect(disp, black, (disp_width * .35, disp_height * .55, 330, 75), 5) # PLAY VS MEDIUM AI BOX
+        pygame.draw.rect(disp, black, (disp_width * .7, disp_height * .55, 270, 75), 5) # PLAY VS HARD AI BOX
+        pygame.draw.rect(disp, black, (disp_width * .45, disp_height * .68, 120, 75), 5) # QUIT BOX
+    TextRect.center = ((disp_width / 2), (disp_height / 6))
     disp.blit(TextSurf, TextRect) # WELCOME TO BATTLEBOATS
     disp.blit(TextSurf2, TextRect2) # PLAY VS HUMAN
     disp.blit(TextSurf6, TextRect6) # PLAY VS EASY AI
@@ -1051,36 +1055,36 @@ def setupGamePlay1():
     disp = pygame.display.set_mode((disp_width, disp_height))
     disp.fill((192, 192, 192))
     pygame.display.set_caption('Battleboats')
-    player_turn=pygame.font.SysFont('Consolas', 40)
+    player_turn = pygame.font.SysFont('Consolas', 40)
 
-    player_switch=pygame.font.SysFont('Consolas', 40)
+    player_switch = pygame.font.SysFont('Consolas', 40)
     player_switch_display=player_switch.render("Player 1's Turn in ", False, (0, 0, 0))
-    count3=player_switch.render("3", False, (0, 0, 0))
-    count2=player_switch.render("2", False, (0, 0, 0))
-    count1=player_switch.render("1", False, (0, 0, 0))
+    count3 = player_switch.render("3", False, (0, 0, 0))
+    count2 = player_switch.render("2", False, (0, 0, 0))
+    count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
     pygame.time.delay(500)
-    disp.blit(count3, (500,150))
+    disp.blit(count3, (500, 150))
     pygame.display.update()
     pygame.time.delay(500)
-    disp.blit(count2, (500,200))
+    disp.blit(count2, (500, 200))
     pygame.display.update()
     pygame.time.delay(500)
-    disp.blit(count1, (500,250))
+    disp.blit(count1, (500, 250))
     pygame.display.update()
     pygame.time.delay(500)
 
     disp.fill((192, 192, 192))
-    player_turn_display=player_turn.render("Player 1's Turn", False, (0, 0, 0))
+    player_turn_display = player_turn.render("Player 1's Turn", False, (0, 0, 0))
     toggle = pygame.font.SysFont('Ariel', 20)
-    toggle_display=toggle.render('  SHOW MY BOATS', False, (0, 0, 0))
-    checkbox=pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
-    toggled=False
-    board_cleared=True
+    toggle_display = toggle.render('SHOW MY BOATS', False, (0, 0, 0))
+    checkbox = pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
+    toggled = False
+    board_cleared = True
     track_toggle()
     disp.blit(player_turn_display, (350, 100))
-    disp.blit(toggle_display, (548,200))
+    disp.blit(toggle_display, (548, 200))
     leftGrid = createRects(200, 200)
     rightGrid = createRects(500, 200)
     gameState = "gamePlay1"
@@ -1097,36 +1101,36 @@ def setupGamePlay2():
     disp = pygame.display.set_mode((disp_width, disp_height))
     disp.fill((192, 192, 192))
     pygame.display.set_caption('Battleboats')
-    player_turn=pygame.font.SysFont('Consolas', 40)
+    player_turn = pygame.font.SysFont('Consolas', 40)
 
-    player_switch=pygame.font.SysFont('Consolas', 40)
-    player_switch_display=player_switch.render("Player 2's Turn in ", False, (0, 0, 0))
-    count3=player_switch.render("3", False, (0, 0, 0))
-    count2=player_switch.render("2", False, (0, 0, 0))
-    count1=player_switch.render("1", False, (0, 0, 0))
+    player_switch = pygame.font.SysFont('Consolas', 40)
+    player_switch_display = player_switch.render("Player 2's Turn in ", False, (0, 0, 0))
+    count3 = player_switch.render("3", False, (0, 0, 0))
+    count2 = player_switch.render("2", False, (0, 0, 0))
+    count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
     pygame.time.delay(500)
-    disp.blit(count3, (500,150))
+    disp.blit(count3, (500, 150))
     pygame.display.update()
     pygame.time.delay(500)
-    disp.blit(count2, (500,200))
+    disp.blit(count2, (500, 200))
     pygame.display.update()
     pygame.time.delay(500)
-    disp.blit(count1, (500,250))
+    disp.blit(count1, (500, 250))
     pygame.display.update()
     pygame.time.delay(500)
 
     disp.fill((192, 192, 192))
-    player_turn_display=player_turn.render("Player 2's Turn", False, (0, 0, 0))
+    player_turn_display = player_turn.render("Player 2's Turn", False, (0, 0, 0))
     toggle = pygame.font.SysFont('Ariel', 20)
-    toggle_display=toggle.render('  SHOW MY BOATS', False, (0, 0, 0))
-    checkbox=pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
-    toggled=False
-    board_cleared=True
+    toggle_display = toggle.render('  SHOW MY BOATS', False, (0, 0, 0))
+    checkbox = pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
+    toggled = False
+    board_cleared = True
     track_toggle()
     disp.blit(player_turn_display, (350, 100))
-    disp.blit(toggle_display, (548,200))
+    disp.blit(toggle_display, (548, 200))
     leftGrid = createRects(200, 200)
     rightGrid = createRects(500, 200)
     gameState = "gamePlay2"
@@ -1135,213 +1139,209 @@ def winState():
     """ Lets the player know that they won """
     l_blue = (80, 171, 250)
     white = (255, 255, 255)
-    black = (0,0,0)
+    black = (0, 0, 0)
     disp.fill(l_blue)
     #Display the Winner of the game
 
     if(winner == "Player 1" or winner == "Player 2"):
-        largeText = pygame.font.Font('freesansbold.ttf',65)
+        largeText = pygame.font.Font('freesansbold.ttf', 65)
         text = winner + " wins!"
         TextSurf, TextRect = text_objects(text, largeText)
-        TextRect.center = ((disp_width/2),(disp_height*.17))
+        TextRect.center = ((disp_width / 2), (disp_height * .17))
         disp.blit(TextSurf, TextRect)
         #pygame.display.update()
-        gameState="winner"
+        gameState = "winner"
 
 
         #Score board for Player 1
-        largeText_2 = pygame.font.Font('freesansbold.ttf',53)
+        largeText_2 = pygame.font.Font('freesansbold.ttf', 53)
         text_Player1 = "Player 1"
         TextSurf, TextRect = text_objects(text_Player1, largeText_2) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4.2),(disp_height*.39)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4.2),(disp_height * .39)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
-        largeTextForScore = pygame.font.Font('freesansbold.ttf',42)
+        largeTextForScore = pygame.font.Font('freesansbold.ttf', 42)
 
         text_Player1_Attack = "Total Attacked: " + (str(totalAttackPlayer1))
         TextSurf, TextRect = text_objects(text_Player1_Attack, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4),(disp_height*.55)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4), (disp_height * .55)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
-    
-        hit1 = ((totalhitPlayer1 / totalAttackPlayer1 )*100)
+
+        hit1 = ((totalhitPlayer1 / totalAttackPlayer1) * 100)
         hit1Percentage = round(hit1, 2)
-        missed1 = ((totalMissedPlayer1 / totalAttackPlayer1 )*100)
+        missed1 = ((totalMissedPlayer1 / totalAttackPlayer1) * 100)
         missed1Percentage = round(missed1, 2)
 
-        text_Player1_Hit    = "Hit in %: " + str(hit1Percentage) 
+        text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
         TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4),(disp_height*.65)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
-        text_Player1_Miss   = "Missed in %: " + str(missed1Percentage)
+        text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
         TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4),(disp_height*.75)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
 
 
         #Score board for Player 2
         text_Player2 = "Player 2"
         TextSurf, TextRect = text_objects(text_Player2, largeText_2) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/1.3),(disp_height*.39)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 1.3), (disp_height * .39)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
 
         text_Player2_Attack = "Total Attacked: " + (str(totalAttackPlayer2))
         TextSurf, TextRect = text_objects(text_Player2_Attack, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/1.3),(disp_height*.55)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 1.3), (disp_height * .55)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
         if(totalAttackPlayer2 > 0):
-            hit2 = ((totalhitPlayer2 / totalAttackPlayer2 )*100)
+            hit2 = ((totalhitPlayer2 / totalAttackPlayer2) * 100)
             hit2Percentage = round(hit2, 2)
-            missed2 = ((totalMissedPlayer2 / totalAttackPlayer2 )*100)
+            missed2 = ((totalMissedPlayer2 / totalAttackPlayer2) * 100)
             missed2Percentage = round(missed2, 2)
-            
-            text_Player2_Hit    = "Hit in %: " + str(hit2Percentage)
+
+            text_Player2_Hit = "Hit in %: " + str(hit2Percentage)
             TextSurf, TextRect = text_objects(text_Player2_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.65)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             #pygame.display.update() # updates pygame window
-            gameState="winner"
-            
-            text_Player2_Miss   = "Missed in %: " + str(missed2Percentage)
+            gameState = "winner"
+
+            text_Player2_Miss = "Missed in %: " + str(missed2Percentage)
             TextSurf, TextRect = text_objects(text_Player2_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.75)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             pygame.display.update() # updates pygame window
-            gameState="winner"
+            gameState = "winner"
         else:
-            text_Player2_Hit    = "Hit in %: " + "none"
+            text_Player2_Hit = "Hit in %: " + "none"
             TextSurf, TextRect = text_objects(text_Player2_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.65)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             #pygame.display.update() # updates pygame window
-            gameState="winner"
-            
-            text_Player2_Miss   = "Missed in %: " + "none"
+            gameState = "winner"
+
+            text_Player2_Miss = "Missed in %: " + "none"
             TextSurf, TextRect = text_objects(text_Player2_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.75)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             pygame.display.update() # updates pygame window
-            gameState="winner"
-            
+            gameState = "winner"
+
     if(winner == "Player Human" or winner == "Player AI"):
-        largeText = pygame.font.Font('freesansbold.ttf',65)
+        largeText = pygame.font.Font('freesansbold.ttf', 65)
         text = winner + " wins!"
         TextSurf, TextRect = text_objects(text, largeText)
-        TextRect.center = ((disp_width/2),(disp_height*.17))
+        TextRect.center = ((disp_width / 2), (disp_height * .17))
         disp.blit(TextSurf, TextRect)
         #pygame.display.update()
-        gameState="winner"
+        gameState = "winner"
 
 
         #Score board for Player Human
-        largeText_2 = pygame.font.Font('freesansbold.ttf',53)
+        largeText_2 = pygame.font.Font('freesansbold.ttf', 53)
         text_Player1 = "Player Human"
         TextSurf, TextRect = text_objects(text_Player1, largeText_2) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4.2),(disp_height*.39)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4.2), (disp_height * .39)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
-        largeTextForScore = pygame.font.Font('freesansbold.ttf',42)
+        largeTextForScore = pygame.font.Font('freesansbold.ttf', 42)
 
         text_Player1_Attack = "Total Attacked: " + (str(totalAttackHuman))
         TextSurf, TextRect = text_objects(text_Player1_Attack, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4),(disp_height*.55)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4), (disp_height * .55)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
-    
-        hit1 = ((totalhitHuman / totalAttackHuman )*100)
+
+        hit1 = ((totalhitHuman / totalAttackHuman) * 100)
         hit1Percentage = round(hit1, 2)
-        missed1 = ((totalMissedHuman / totalAttackHuman )*100)
+        missed1 = ((totalMissedHuman / totalAttackHuman) * 100)
         missed1Percentage = round(missed1, 2)
 
-        text_Player1_Hit    = "Hit in %: " + str(hit1Percentage) 
+        text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
         TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4),(disp_height*.65)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
-        text_Player1_Miss   = "Missed in %: " + str(missed1Percentage)
+        text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
         TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/4),(disp_height*.75)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
 
 
         #Score board for Player AI
         text_Player2 = "Player AI"
         TextSurf, TextRect = text_objects(text_Player2, largeText_2) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/1.3),(disp_height*.39)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 1.3), (disp_height * .39)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
 
         text_Player2_Attack = "Total Attacked: " + (str(totalAttackAI))
         TextSurf, TextRect = text_objects(text_Player2_Attack, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width/1.3),(disp_height*.55)) # modifies the center of text rectangle based on pygame GUI window
+        TextRect.center = ((disp_width / 1.3), (disp_height * .55)) # modifies the center of text rectangle based on pygame GUI window
         disp.blit(TextSurf, TextRect)
         #pygame.display.update() # updates pygame window
-        gameState="winner"
+        gameState = "winner"
 
         if(totalAttackAI > 0):
-            hit2 = ((totalhitPlayer2 / totalAttackAI )*100)
+            hit2 = ((totalhitPlayer2 / totalAttackAI) * 100)
             hit2Percentage = round(hit2, 2)
-            missed2 = ((totalMissedPlayer2 / totalAttackAI )*100)
+            missed2 = ((totalMissedPlayer2 / totalAttackAI) * 100)
             missed2Percentage = round(missed2, 2)
-            
-            text_Player2_Hit    = "Hit in %: " + str(hit2Percentage)
+
+            text_Player2_Hit = "Hit in %: " + str(hit2Percentage)
             TextSurf, TextRect = text_objects(text_Player2_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.65)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             #pygame.display.update() # updates pygame window
-            gameState="winner"
-            
-            text_Player2_Miss   = "Missed in %: " + str(missed2Percentage)
+            gameState = "winner"
+
+            text_Player2_Miss = "Missed in %: " + str(missed2Percentage)
             TextSurf, TextRect = text_objects(text_Player2_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.75)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             pygame.display.update() # updates pygame window
-            gameState="winner"
+            gameState = "winner"
         else:
-            text_Player2_Hit    = "Hit in %: " + "none"
+            text_Player2_Hit = "Hit in %: " + "none"
             TextSurf, TextRect = text_objects(text_Player2_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.65)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             #pygame.display.update() # updates pygame window
-            gameState="winner"
-            
-            text_Player2_Miss   = "Missed in %: " + "none"
+            gameState = "winner"
+
+            text_Player2_Miss = "Missed in %: " + "none"
             TextSurf, TextRect = text_objects(text_Player2_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-            TextRect.center = ((disp_width/1.3),(disp_height*.75)) # modifies the center of text rectangle based on pygame GUI window
+            TextRect.center = ((disp_width / 1.3), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
             disp.blit(TextSurf, TextRect)
             pygame.display.update() # updates pygame window
-            gameState="winner"
-
-    
-
-
+            gameState = "winner"
 
 if __name__ == "__main__":
     setupWelcome()
@@ -1392,31 +1392,30 @@ if __name__ == "__main__":
             trackRects1(leftGrid)
             track_toggle()
 
-            sunk_text=pygame.font.SysFont('Consolas', 30)
-            sunk_text_display=sunk_text.render("Battleboats you've sunk:", False, (0, 0, 0))
+            sunk_text = pygame.font.SysFont('Consolas', 30)
+            sunk_text_display = sunk_text.render("Battleboats you've sunk:", False, (0, 0, 0))
             disp.blit(sunk_text_display, (340, 590))
             pygame.display.update()
-            largeText = pygame.font.Font('freesansbold.ttf',30)
-            i=0
-            for index in range(0,numberOfBoats):
+            largeText = pygame.font.Font('freesansbold.ttf', 30)
+            i = 0
+            for index in range(0, numberOfBoats):
                 if player2.getShip(index).checkDestroyed():
-                    num=largeText.render("1x"+str(index+1), False, (255,0,0))
-                    disp.blit(num, ((disp_width*.34 + i),(disp_height*.90)))
+                    num = largeText.render("1x" + str(index + 1), False, (255, 0, 0))
+                    disp.blit(num, ((disp_width * .34 + i), (disp_height * .90)))
                     pygame.display.update()
                 else:
-                    destroyed_num=largeText.render("1x"+str(index+1), False, (255,255,255))
-                    disp.blit(destroyed_num, ((disp_width*.34 + i),(disp_height*.90)))
+                    destroyed_num = largeText.render("1x" + str(index + 1), False, (255, 255, 255))
+                    disp.blit(destroyed_num, ((disp_width * .34 + i), (disp_height * .90)))
                     pygame.display.update()
-                i=i+87
-
+                i = i + 87
 
             if toggled and board_cleared:
                 showboat1(rightGrid)
-                board_cleared=False
+                board_cleared = False
             if not toggled and not board_cleared:
                 clear_board(rightGrid)
-                rightGrid=createRects(500, 200)
-                board_cleared=True
+                rightGrid = createRects(500, 200)
+                board_cleared = True
 
         elif gameState == "gamePlay2":
             if player1.shipsDestroyed() == num_destroyed:
@@ -1428,30 +1427,30 @@ if __name__ == "__main__":
             trackRects2(leftGrid)
             track_toggle()
 
-            sunk_text=pygame.font.SysFont('Consolas', 30)
-            sunk_text_display=sunk_text.render("Battleboats you've sunk:", False, (0, 0, 0))
+            sunk_text = pygame.font.SysFont('Consolas', 30)
+            sunk_text_display = sunk_text.render("Battleboats you've sunk:", False, (0, 0, 0))
             disp.blit(sunk_text_display, (340, 590))
             pygame.display.update()
-            largeText = pygame.font.Font('freesansbold.ttf',30)
-            i=0
+            largeText = pygame.font.Font('freesansbold.ttf', 30)
+            i = 0
             for index in range(0,numberOfBoats):
                 if player1.getShip(index).checkDestroyed():
-                    num=largeText.render("1x"+str(index+1), False, (255,0,0))
-                    disp.blit(num, ((disp_width*.34 + i),(disp_height*.90)))
+                    num = largeText.render("1x" + str(index + 1), False, (255, 0, 0))
+                    disp.blit(num, ((disp_width * .34 + i), (disp_height * .90)))
                     pygame.display.update()
                 else:
-                    destroyed_num=largeText.render("1x"+str(index+1), False, (255,255,255))
-                    disp.blit(destroyed_num, ((disp_width*.34 + i),(disp_height*.90)))
+                    destroyed_num = largeText.render("1x" + str(index + 1), False, (255, 255, 255))
+                    disp.blit(destroyed_num, ((disp_width * .34 + i), (disp_height * .90)))
                     pygame.display.update()
-                i=i+87
+                i = i + 87
 
             if toggled and board_cleared:
                 showboat2(rightGrid)
-                board_cleared=False
+                board_cleared = False
             if not toggled and not board_cleared:
                 clear_board(rightGrid)
-                rightGrid=createRects(500, 200)
-                board_cleared=True
+                rightGrid = createRects(500, 200)
+                board_cleared = True
         elif gameState == "winner":
             winState()
         clock.tick(30)
