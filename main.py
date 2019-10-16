@@ -44,6 +44,8 @@ if __name__ == "__main__":
     numberOfBoats = 0
     player1 = Player()
     player2 = Player()
+    playerHuman = Player()
+    playerAI = Player()
     placeNumber = 1
     spotsToCheck = [] #[[0 for x in range(2)] for y in range(placeNumber)]
     turn = 0
@@ -402,8 +404,8 @@ def trackRectsAI(rects, difficulty):
     hit_text = pygame.font.SysFont('Consolas', 40)
 
     if (difficulty == "easy"):
-        xCoord = random.randint(0, 8)
-        yCoord = random.randint(0, 8)
+        xCoord = random.randint(0, 7)
+        yCoord = random.randint(0, 7)
         for i in range(0, 8):
             for j in range(0, 8):
                 if (xCoord, yCoord) in opposing_ship2 and not (xCoord, yCoord) in rects_clicked2:
@@ -651,10 +653,16 @@ def trackPlacement(rects):
     global spotsToCheck
     global player1
     global player2
+    global playerHuman
+    global playerAI
     global opposing_ship1
     global opposing_ship2
+    global opposing_shipHuman
+    global opposing_shipAI
     global my_ships1
     global my_ships2
+    global my_shipsHuman
+    global my_shipsAI
     newPress = True
     mouseX = 0
 
@@ -682,6 +690,9 @@ def trackPlacement(rects):
             elif spotsToCheck[i] in player2.getCoordinateList() and turn % 2 != 0:
                 overlap = True
                 replace.append(spotsToCheck[i])
+            elif spotsToCheck[i] in playerHuman.getCoordinateList():
+                overlap = True
+                replace.append(spotsToCheck[i])
 
         if B.validPlace(spotsToCheck) and overlap == False:
             print("Boat Placed")
@@ -698,6 +709,11 @@ def trackPlacement(rects):
                 for i in range(len(B.getCoordinates())):
                     my_ships2.append(B.getCoordinates()[i])
                     opposing_ship1.append(B.getCoordinates()[i])
+            elif gameState == "placeBoatsHuman":
+                playerHuman.placeShip(B)
+                for i in range(len(B.getCoordinates())):
+                    my_shipsHuman.append(B.getCoordinates()[i])
+                    opposing_shipAI.append(B.getCoordinates()[i])
 
         else:
             print("Error placing boat")
@@ -1040,8 +1056,48 @@ def setupPlaceBoatsHuman():
     gameState = "placeBoatsHuman"
 
 def setupPlaceBoatsAI():
-    #to do, place AI boats
-    print("TO DO, PLACE AI BOATS\n")
+    #places AI boats
+    for i in range(1,numberOfBoats+1):
+        B = Boat()
+        goodCoords = 0
+        while (goodCoords == 0):
+            overlap = False
+            spotsToCheck = []
+            spotsToCheck = generateBoatLocation(i)
+            for i in range(len(spotsToCheck)):
+                if spotsToCheck[i] in playerAI.getCoordinateList():
+                    overlap = True
+            if (overlap == False):
+                goodCoords = 1
+
+        if B.validPlace(spotsToCheck) and overlap == False:
+            print("Boat Placed")
+            if gameState == "placeBoatsHuman":
+                playerAI.placeShip(B)
+                for i in range(len(B.getCoordinates())):
+                    my_shipsAI.append(B.getCoordinates()[i])
+                    opposing_shipHuman.append(B.getCoordinates()[i])
+
+def generateBoatLocation(boatLength):
+    #helper function for placing AI boats
+    boatDirection = random.randint(0,1)
+    returnCoords = []
+    if (boatDirection == 0): #generate vertical coordinates
+        bottomCoord = random.randint(boatLength - 1,7)
+        colCoord = random.randint(0,7)
+        returnCoords.append((bottomCoord,colCoord))
+        if (boatLength > 1):
+            for x in range(1,boatLength): #CHECK
+                returnCoords.append((bottomCoord-x,colCoord))
+        return returnCoords
+    elif (boatDirection == 1): #generate horizontal getCoordinates
+        rowCoord = random.randint(0,7)
+        rightCoord = random.randint(boatLength - 1,7)
+        returnCoords.append((rowCoord,rightCoord))
+        if (boatLength > 1):
+            for x in range(1,boatLength):
+                returnCoords.append((rowCoord,rightCoord-x))
+        return returnCoords
 
 def setupGamePlay1():
     """ Sets up initial graphics and variables for the gamePlay state """
@@ -1134,6 +1190,55 @@ def setupGamePlay2():
     leftGrid = createRects(200, 200)
     rightGrid = createRects(500, 200)
     gameState = "gamePlay2"
+
+def setupGamePlayHuman():
+    """ Sets up initial graphics and variables for the gamePlay state """
+
+    global leftGrid
+    global rightGrid
+    global gameState
+
+    disp_width = 1080
+    disp_height = 720
+    disp = pygame.display.set_mode((disp_width, disp_height))
+    disp.fill((192, 192, 192))
+    pygame.display.set_caption('Battleboats')
+    player_turn = pygame.font.SysFont('Consolas', 40)
+
+    player_switch = pygame.font.SysFont('Consolas', 40)
+    player_switch_display = player_switch.render("Player Human's Turn in ", False, (0, 0, 0))
+    count3 = player_switch.render("3", False, (0, 0, 0))
+    count2 = player_switch.render("2", False, (0, 0, 0))
+    count1 = player_switch.render("1", False, (0, 0, 0))
+    disp.blit(player_switch_display, (320, 100))
+    pygame.display.update()
+    pygame.time.delay(500)
+    disp.blit(count3, (500, 150))
+    pygame.display.update()
+    pygame.time.delay(500)
+    disp.blit(count2, (500, 200))
+    pygame.display.update()
+    pygame.time.delay(500)
+    disp.blit(count1, (500, 250))
+    pygame.display.update()
+    pygame.time.delay(500)
+
+    disp.fill((192, 192, 192))
+    player_turn_display = player_turn.render("Player Human's Turn", False, (0, 0, 0))
+    toggle = pygame.font.SysFont('Ariel', 20)
+    toggle_display = toggle.render('  SHOW MY BOATS', False, (0, 0, 0))
+    checkbox = pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
+    toggled = False
+    board_cleared = True
+    track_toggle()
+    disp.blit(player_turn_display, (350, 100))
+    disp.blit(toggle_display, (548, 200))
+    leftGrid = createRects(200, 200)
+    rightGrid = createRects(500, 200)
+    gameState = "gamePlayHuman"
+
+def setupGamePlayAI():
+    #todo
 
 def winState():
     """ Lets the player know that they won """
@@ -1451,6 +1556,8 @@ if __name__ == "__main__":
                 clear_board(rightGrid)
                 rightGrid = createRects(500, 200)
                 board_cleared = True
+        elif gameState == "gamePlayHuman":
+            #todo
         elif gameState == "winner":
             winState()
         clock.tick(30)
