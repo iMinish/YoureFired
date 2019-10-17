@@ -374,6 +374,20 @@ def trackRectsHuman(rects):
                     #scoreBoard total Missed update
                     totalMissedHuman = totalMissedHuman + 1
 
+def fireAdjacent(shipHitsAI):
+    #shipHitAI is an array passed in with the current spot we want to hit
+
+    if("""able to fire above""")
+        #return CP above the passed in CP
+    elif("""able to fire to the right""")
+        #return CP to the right of passed in CP
+    elif("""able to fire below""")
+        #return CP below the passed in CP
+    elif("""able to fire to the left""")
+        #return CP to the left of passed in CP
+    else:
+
+
 def trackRectsAI(rects, difficulty):
     """Allows the AI to fire
     Args:
