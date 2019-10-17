@@ -102,12 +102,10 @@ def event_handler():
 
 def isPointInRect(x, y, rect):
     """Checks if a coordinate is within the bounds of a pygame.rect object
-
     Args:
     x (float): x coordinate to check
     y (float): y coordinate to check
     rect (pygame.Rect): object to see if x any y are in
-
     Returns:
         bool: True if x and y are in rect, False otherwise
     """
@@ -118,11 +116,9 @@ def isPointInRect(x, y, rect):
 
 def createRects(x, y):
     """Creates an 8x8 grid of squares
-
     Args:
     x (int): the x position for the top right corner of the grid to start at
     y (int): the y position for the top right corner of the grid to start at
-
     Returns:
         8x8 array of pygame.Rect objects
     """
@@ -151,7 +147,6 @@ def createRects(x, y):
 
 def text_objects(text, font): #function used from https://pythonprogramming.net/pygame-start-menu-tutorial/
     """Creates a text object
-
     Args:
     text: the string to display
     font: the style of the text
@@ -162,7 +157,6 @@ def text_objects(text, font): #function used from https://pythonprogramming.net/
 
 def showboat1(rects):
     """Shows player 1's own boats after pressing the toggle button
-
     Args:
     rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -175,7 +169,6 @@ def showboat1(rects):
 
 def showboat2(rects):
     """Shows player 2's own boats after pressing the toggle button
-
     Args:
     rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -187,7 +180,6 @@ def showboat2(rects):
 
 def trackRects1(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 1
-
     Args:
         rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -256,7 +248,6 @@ def trackRects1(rects):
 
 def trackRects2(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 2
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -322,7 +313,6 @@ def trackRects2(rects):
 
 def trackRectsHuman(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player human
-
     Args:
         rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -386,7 +376,6 @@ def trackRectsHuman(rects):
 
 def trackRectsAI(rects, difficulty):
     """Allows the AI to fire
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
         difficulty (string): difficulty setting for AI
@@ -541,7 +530,6 @@ def trackRectsAI(rects, difficulty):
 
 def printRects1(rects):
     """Draws the squares on the board that have been hit or missed for player 1
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -557,7 +545,6 @@ def printRects1(rects):
 
 def printRects2(rects):
     """Draws the squares on the board that have been hit or missed for player 2
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -573,7 +560,6 @@ def printRects2(rects):
 
 def printRectsHuman(rects):
     """Draws the squares on the board that have been hit or missed for player 1
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -589,7 +575,6 @@ def printRectsHuman(rects):
 
 def printRectsAI(rects):
     """Draws the squares on the board that have been hit or missed for player 1
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -631,7 +616,6 @@ def track_toggle():
 
 def clear_board(rects):
     """Clears the board of all squares - intended to be used after showing the players own boats
-
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -643,7 +627,6 @@ def clear_board(rects):
 
 def trackPlacement(rects):
     """ tracks the placement of boats on the placeBoats screens for player 1 and 2
-
     Args:
         rects (8x8 array of pygame.Rect objects): grid to check on
     """
@@ -762,7 +745,6 @@ def trackPlayButton_AI(): #PLAY VS AI
 
 def getSize():
     """Handles the user interface of selecting the size of the boats
-
     Args:
     None
     Returns:
@@ -885,7 +867,6 @@ def trackQuitButton():
 def updateBoatToPlaceText(size):
     """ Every time this is called, the text that says "Boat size to place..." on gameState = "placeBoats1"
         or gameState = "placeBoats2" will get redrawn with the new size shown
-
     Args:
         size (int): should corresponds to size of current boat to place (e.g. global placeNumber)
     """
@@ -900,7 +881,6 @@ def updateBoatToPlaceText(size):
 
 def showSwitchPlayers(originalTime):
     """ Displays the screen that tells players to switch. Gives players three seconds to do so.
-
     Args:
         originalTime (pygame.time.get_ticks()): represents the original time (in systicks, represented as int)
                                                 that this method was called. It is used agains the current
@@ -1001,7 +981,6 @@ def setupWelcome():
 
 def setupPlaceBoats(whichPlayer):
     """ Sets up initial graphics and variables for the placeBoats state
-
     Args:
         whichPlayer (int): 1 -> setup the placeBoats state for player 1, 2 -> setup the placeBoates satate for player 2
     """
@@ -1029,7 +1008,6 @@ def setupPlaceBoats(whichPlayer):
 
 def setupPlaceBoatsHuman():
     """ Sets up initial graphics and variables for the placeBoats state for Human in human vs AI
-
     Args:
         None
     """
