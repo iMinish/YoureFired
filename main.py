@@ -205,6 +205,10 @@ def trackRects1(rects):
                     print("Player1 hit a ship!") #TESTER COMMENT
                     player2.addToHitList(i, j)
                     rects_clicked1.append((i, j))
+                    if player2.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 1"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -220,10 +224,6 @@ def trackRects1(rects):
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total hit update
                     totalhitPlayer1 = totalhitPlayer1 + 1
-                    if player2.shipsDestroyed() == numberOfBoats:
-                        winner = "Player 1"
-                        gameState = "winner"
-                        winState()
                     setupGamePlay2() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i, j))
@@ -269,6 +269,10 @@ def trackRects2(rects):
                     rects_hit2.append((i, j))
                     player1.addToHitList(i, j)
                     rects_clicked2.append((i, j))
+                    if player1.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 2"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -284,10 +288,6 @@ def trackRects2(rects):
                     totalAttackPlayer2 = totalAttackPlayer2 + 1
                     #scoreboard total hit update
                     totalhitPlayer2 = totalhitPlayer2 + 1
-                    if player1.shipsDestroyed() == numberOfBoats:
-                        winner = "Player 2"
-                        gameState = "winner"
-                        winState()
                     setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked2:
                     rects_missed2.append((i, j))
@@ -334,6 +334,10 @@ def trackRectsHuman(rects):
                     rects_hitHuman.append((i, j))
                     playerAI.addToHitList(i, j)
                     rects_clickedHuman.append((i, j))
+                    if playerAI.shipsDestroyed() == numberOfBoats:
+                        winner = "Player Human"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -349,10 +353,6 @@ def trackRectsHuman(rects):
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total hit update
                     totalhitHuman = totalhitHuman + 1
-                    if playerAI.shipsDestroyed() == numberOfBoats:
-                        winner = "Player Human"
-                        gameState = "winner"
-                        winState()
                     setupGamePlayAI()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clickedHuman: #clicked on a square and missed
                     rects_missedHuman.append((i, j))
@@ -374,17 +374,18 @@ def trackRectsHuman(rects):
                     #scoreBoard total Missed update
                     totalMissedHuman = totalMissedHuman + 1
 
-#def fireAdjacent(shipHitsAI):
+def fireAdjacent(shipHitAI):
     #shipHitAI is an array passed in with the current spot we want to hit
-    #for coord in reversed(shipHitAI):
-        #if(((coord[0]-1,coord[1]) not in rects_clickedAI) and (((coord[0]-1) >= 0) and ((coord[0]-1) <= 7)))
-            #return (coord[0]-1, coord[1])
-        #elif(((coord[0],coord[1]+1) not in rects_clickedAI) and (((coord[1]+1) >= 0) and ((coord[1]+1) <= 7)))
-            #return(coord[0], coord[1]+1)
-        #elif(((coord[0]+1,coord[1]) not in rects_clickedAI) and (((coord[0]+1) >= 0) and ((coord[0]+1) <= 7)))
-            #return (coord[0]+1, coord[1])
-        #elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7)))
-            #return(coord[0], coord[1]-1)
+    for coord in reversed(shipHitAI):
+        print("in fireadj")
+        if(((coord[0]-1,coord[1]) not in rects_clickedAI) and (((coord[0]-1) >= 0) and ((coord[0]-1) <= 7))):
+            return coord[0]-1, coord[1]
+        elif(((coord[0],coord[1]+1) not in rects_clickedAI) and (((coord[1]+1) >= 0) and ((coord[1]+1) <= 7))):
+            return coord[0], coord[1]+1
+        elif(((coord[0]+1,coord[1]) not in rects_clickedAI) and (((coord[0]+1) >= 0) and ((coord[0]+1) <= 7))):
+            return coord[0]+1, coord[1]
+        elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7))):
+            return coord[0], coord[1]-1
     #if all of these are misses, medium needs to fire at another ranodm spot then call this again after the random shit is fired
 
 
@@ -404,6 +405,7 @@ def trackRectsAI(rects, difficulty):
     global totalAttackAI
     global totalhitAI
     global totalMissedAI
+    global shipHitsAI
 
     hit_text = pygame.font.SysFont('Consolas', 40)
 
@@ -416,8 +418,7 @@ def trackRectsAI(rects, difficulty):
         while (goodCoord == 0):
             tempX = random.randint(0, 7)
             tempY = random.randint(0, 7)
-            yCoord = random.randint(0, 7)
-            if ((xCoord, yCoord) not in rects_clickedAI):
+            if ((tempX, tempY) not in rects_clickedAI):
                 xCoord = tempX
                 yCoord = tempY
                 goodCoord = 1
@@ -440,7 +441,6 @@ def trackRectsAI(rects, difficulty):
             rects_missedAI.append((xCoord, yCoord))
             rects_clickedAI.append((xCoord, yCoord))
             print(rects_clickedAI)
-            pygame.time.delay(250)
             #scoreBoard total attacked update
             totalAttackAI = totalAttackAI + 1
             #scoreBoard total Missed update
@@ -452,22 +452,23 @@ def trackRectsAI(rects, difficulty):
         #generate coordinate:
         if (shipHitsAI):
             xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
+            print("will fire on")
+            print(xCoord)
+            print(yCoord)
         else:
             goodCoord = 0
             while (goodCoord == 0):
                 tempX = random.randint(0, 7)
                 tempY = random.randint(0, 7)
-                yCoord = random.randint(0, 7)
-                if ((xCoord, yCoord) not in rects_clickedAI):
+                if ((tempX, tempY) not in rects_clickedAI):
                     xCoord = tempX
                     yCoord = tempY
                     goodCoord = 1
 
         if (xCoord, yCoord) in opposing_shipAI:
-            rects_hitAI.append((i, j))
-            playerHuman.addToHitList(i, j)
-            rects_clickedAI.append((i, j))
-            pygame.time.delay(500)
+            rects_hitAI.append((xCoord, yCoord))
+            playerHuman.addToHitList(xCoord, yCoord)
+            rects_clickedAI.append((xCoord, yCoord))
             print(rects_clickedAI)
             print("destroyed", playerAI.shipsDestroyed())
             #scoreBoard total attacked update
@@ -478,21 +479,20 @@ def trackRectsAI(rects, difficulty):
                 winner = "Player AI"
                 gameState = "winner"
                 winState()
-            shipHitsAI.append()
+            shipHitsAI.append((xCoord, yCoord))
             #if sunk, remove ship's coords from global shipList
             checkIfSunk = playerHuman.getShipList()
             for currentShip in checkIfSunk:
                 shipsCoords = currentShip.getCoordinates()
                 if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
-                    for coord in shipCoords:
+                    for coord in shipsCoords:
                         shipHitsAI.remove(coord) #CHECK
             setupGamePlayHuman()
 
         else:
-            rects_missedAI.append((i, j))
-            rects_clickedAI.append((i, j))
+            rects_missedAI.append((xCoord, yCoord))
+            rects_clickedAI.append((xCoord, yCoord))
             print(rects_clickedAI)
-            pygame.time.delay(250)
             #scoreBoard total attacked update
             totalAttackAI= totalAttackAI + 1
             #scoreBoard total Missed update
@@ -509,7 +509,6 @@ def trackRectsAI(rects, difficulty):
                 rects_hitAI.append((i, j))
                 playerHuman.addToHitList(i, j)
                 rects_clickedAI.append((i, j))
-                pygame.time.delay(500)
                 print(rects_clickedAI)
                 print("destroyed", playerAI.shipsDestroyed())
                 #scoreBoard total attacked update
