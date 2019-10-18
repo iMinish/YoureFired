@@ -25,7 +25,6 @@ if __name__ == "__main__":
     from pygame.locals import *
     import random
     from boats import Boat
-    from executive import Executive
     from player import Player
     pygame.init()
 
@@ -68,7 +67,6 @@ if __name__ == "__main__":
     rects_hit2 = []
     opposing_ship2 = []
     my_ships2 = []
-    #game = Executive()
 
     board_cleared = True
 
@@ -206,6 +204,12 @@ def trackRects1(rects):
                     print("Player1 hit a ship!") #TESTER COMMENT
                     player2.addToHitList(i, j)
                     rects_clicked1.append((i, j))
+
+                    if player2.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 1"
+                        gameState = "winner"
+                        winState()
+
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -221,10 +225,10 @@ def trackRects1(rects):
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total hit update
                     totalhitPlayer1 = totalhitPlayer1 + 1
-                    if player2.shipsDestroyed() == numberOfBoats:
-                        winner = "Player 1"
-                        gameState = "winner"
-                        winState()
+                    #if player2.shipsDestroyed() == numberOfBoats:
+                    #    winner = "Player 1"
+                    #    gameState = "winner"
+                    #    winState()
                     setupGamePlay2() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i, j))
@@ -270,6 +274,10 @@ def trackRects2(rects):
                     rects_hit2.append((i, j))
                     player1.addToHitList(i, j)
                     rects_clicked2.append((i, j))
+                    if player1.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 2"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -285,10 +293,10 @@ def trackRects2(rects):
                     totalAttackPlayer2 = totalAttackPlayer2 + 1
                     #scoreboard total hit update
                     totalhitPlayer2 = totalhitPlayer2 + 1
-                    if player1.shipsDestroyed() == numberOfBoats:
-                        winner = "Player 2"
-                        gameState = "winner"
-                        winState()
+                    #if player1.shipsDestroyed() == numberOfBoats:
+                    #    winner = "Player 2"
+                    #    gameState = "winner"
+                    #    winState()
                     setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked2:
                     rects_missed2.append((i, j))
