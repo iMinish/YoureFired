@@ -412,10 +412,10 @@ def trackRectsAI(rects, difficulty):
         yCoord = random.randint(0, 7)
         for i in range(0, 8):
             for j in range(0, 8):
-                if (xCoord, yCoord) in opposing_ship2 and not (xCoord, yCoord) in rects_clickedAI:
-                    rects_hit2.append((i, j))
-                    player1.addToHitList(i, j)
-                    rects_clicked2.append((i, j))
+                if (xCoord, yCoord) in opposing_shipAI and not (xCoord, yCoord) in rects_clickedAI:
+                    rects_hitAI.append((i, j))
+                    playerHuman.addToHitList(i, j)
+                    rects_clickedAI.append((i, j))
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -435,10 +435,10 @@ def trackRectsAI(rects, difficulty):
                         winner = "Player AI"
                         gameState = "winner"
                         winState()
-                    setupGamePlay1()
-                elif not (xCoord, yCoord) in rects_clicked2:
-                    rects_missed2.append((i, j))
-                    rects_clicked2.append((i, j))
+                    setupGamePlayHuman()
+                elif not (xCoord, yCoord) in rects_clickedAI:
+                    rects_missedAI.append((i, j))
+                    rects_clickedAI.append((i, j))
                     pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
@@ -450,11 +450,11 @@ def trackRectsAI(rects, difficulty):
                     pygame.display.update()
                     print(rects_clickedAI)
                     pygame.time.delay(250)
-                    setupGamePlayHuman()
                     #scoreBoard total attacked update
                     totalAttackAI = totalAttackAI + 1
                     #scoreBoard total Missed update
                     totalMissedAI = totalMissedAI + 1
+                    setupGamePlayHuman()
     elif (difficulty == "medium"):
         if (not shipHitsAI):
             xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
@@ -754,20 +754,24 @@ def trackPlayButton(): #PLAY VS HUMAN
 def trackPlayButton_AI(): #PLAY VS AI
     """ Tracks if the PLAY VS AI button on the welcome screen has been pressed. If it has, ????????????????"""
     global gameState
+    global difficulty
 
     if pygame.mouse.get_pressed() == (1, 0, 0):
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .08, disp_height * .55, 260, 75)) and not numberOfBoats == 0: # PLAY VS EASY AI
             print("PLAY VS EASY AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "easy"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .35, disp_height * .55, 330, 75)) and not numberOfBoats == 0: # PLAY VS MEDIUM AI
             print("PLAY VS MEDIUM AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "medium"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .7, disp_height * .55, 270, 75)) and not numberOfBoats == 0: # PLAY VS HARD AI
             print("PLAY VS HARD AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "hard"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
 def getSize():
     """Handles the user interface of selecting the size of the boats
@@ -1061,6 +1065,9 @@ def setupPlaceBoatsHuman():
 
 def setupPlaceBoatsAI():
     #places AI boats
+    global my_shipsAI
+    global opposing_shipHuman
+    global playerAI
     for i in range(1,numberOfBoats+1):
         B = Boat()
         goodCoords = 0
@@ -1068,19 +1075,19 @@ def setupPlaceBoatsAI():
             overlap = False
             spotsToCheck = []
             spotsToCheck = generateBoatLocation(i)
-            for i in range(len(spotsToCheck)):
-                if spotsToCheck[i] in playerAI.getCoordinateList():
+            for x in range(len(spotsToCheck)):
+                if spotsToCheck[x] in playerAI.getCoordinateList():
                     overlap = True
             if (overlap == False):
                 goodCoords = 1
 
         if B.validPlace(spotsToCheck) and overlap == False:
             print("Boat Placed")
-            if gameState == "placeBoatsHuman":
+            if gameState == "None":
                 playerAI.placeShip(B)
-                for i in range(len(B.getCoordinates())):
-                    my_shipsAI.append(B.getCoordinates()[i])
-                    opposing_shipHuman.append(B.getCoordinates()[i])
+                for x in range(len(B.getCoordinates())):
+                    my_shipsAI.append(B.getCoordinates()[x])
+                    opposing_shipHuman.append(B.getCoordinates()[x])
 
 def generateBoatLocation(boatLength):
     #helper function for placing AI boats
