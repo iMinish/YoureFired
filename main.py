@@ -185,6 +185,7 @@ def trackRects1(rects):
     """
 
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -224,7 +225,8 @@ def trackRects1(rects):
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total hit update
                     totalhitPlayer1 = totalhitPlayer1 + 1
-                    setupGamePlay2() # Fixed fire until miss
+                    if (gameState != "winner"):
+                        setupGamePlay2()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked1: #clicked on a square and missed
                     rects_missed1.append((i, j))
                     #print("in 2")
@@ -240,11 +242,12 @@ def trackRects1(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clicked1)
-                    setupGamePlay2() # Fixed fire until hit
                     #scoreboard total attacked update
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total missed update
                     totalMissedPlayer1 = totalMissedPlayer1 + 1
+                    if (gameState != "winner"):
+                        setupGamePlay2()
 
 def trackRects2(rects):
     """Tracks when a single square in a grid is pressed by the mouse for player 2
@@ -253,6 +256,7 @@ def trackRects2(rects):
     """
 
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -288,7 +292,8 @@ def trackRects2(rects):
                     totalAttackPlayer2 = totalAttackPlayer2 + 1
                     #scoreboard total hit update
                     totalhitPlayer2 = totalhitPlayer2 + 1
-                    setupGamePlay1() # Fixed fire until miss
+                    if (gameState != "winner"):
+                        setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked2:
                     rects_missed2.append((i, j))
                     rects_clicked2.append((i, j))
@@ -303,11 +308,12 @@ def trackRects2(rects):
                     pygame.display.update()
                     print(rects_clicked2)
                     pygame.time.delay(250)
-                    setupGamePlay1() # Fixed fire until hit
                     #scoreBoard total attacked update
                     totalAttackPlayer2 = totalAttackPlayer2 + 1
                     #scoreboard total missed update
                     totalMissedPlayer2 = totalMissedPlayer2 + 1
+                    if (gameState != "winner"):
+                        setupGamePlay1()
     elif pygame.mouse.get_pressed() != (1, 0, 0):
         newPress = True
 
@@ -318,6 +324,7 @@ def trackRectsHuman(rects):
     """
 
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -353,7 +360,8 @@ def trackRectsHuman(rects):
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total hit update
                     totalhitHuman = totalhitHuman + 1
-                    setupGamePlayAI()
+                    if (gameState != "winner"):
+                        setupGamePlayAI()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clickedHuman: #clicked on a square and missed
                     rects_missedHuman.append((i, j))
                     print("in 2")
@@ -368,11 +376,12 @@ def trackRectsHuman(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clickedHuman)
-                    setupGamePlayAI()
                     #scoreBoard total attacked update
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total Missed update
                     totalMissedHuman = totalMissedHuman + 1
+                    if (gameState != "winner"):
+                        setupGamePlayAI()
 
 def fireAdjacent(shipHitAI):
     #shipHitAI is an array passed in with the current spot we want to hit
@@ -398,6 +407,7 @@ def trackRectsAI(rects, difficulty):
     """
 
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -436,7 +446,8 @@ def trackRectsAI(rects, difficulty):
                 winner = "Player AI"
                 gameState = "winner"
                 winState()
-            setupGamePlayHuman()
+            if (gameState != "winner"):
+                setupGamePlayHuman()
         else:
             rects_missedAI.append((xCoord, yCoord))
             rects_clickedAI.append((xCoord, yCoord))
@@ -445,7 +456,8 @@ def trackRectsAI(rects, difficulty):
             totalAttackAI = totalAttackAI + 1
             #scoreBoard total Missed update
             totalMissedAI = totalMissedAI + 1
-            setupGamePlayHuman()
+            if (gameState != "winner"):
+                setupGamePlayHuman()
 
 
     elif (difficulty == "medium"):
@@ -487,7 +499,8 @@ def trackRectsAI(rects, difficulty):
                 if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
                     for coord in shipsCoords:
                         shipHitsAI.remove(coord) #CHECK
-            setupGamePlayHuman()
+            if (gameState != "winner"):
+                setupGamePlayHuman()
 
         else:
             rects_missedAI.append((xCoord, yCoord))
@@ -497,7 +510,8 @@ def trackRectsAI(rects, difficulty):
             totalAttackAI= totalAttackAI + 1
             #scoreBoard total Missed update
             totalMissedAI = totalMissedAI + 1
-            setupGamePlayHuman()
+            if (gameState != "winner"):
+                setupGamePlayHuman()
 
 
     elif (difficulty == "hard"):
@@ -522,12 +536,12 @@ def trackRectsAI(rects, difficulty):
                     cont = 0
                     break
                 print("about to cont")
-                setupGamePlayHuman()
+                if (gameState != "winner"):
+                    setupGamePlayHuman()
                 cont = 0
                 break
             if (cont == 0):
                 break
-            print("BROKEN")
 
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
