@@ -483,7 +483,7 @@ def trackRectsAI(rects, difficulty):
             isSunk = False
             for currentShip in checkIfSunk:
                 shipsCoords = currentShip.getCoordinates()
-                if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords): #CHECK
+                if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
                     isSunk = True
                     for coord in shipCoords:
                         shipHitsAI.remove(coord) #CHECK
