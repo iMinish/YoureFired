@@ -4,19 +4,15 @@ totalAttackPlayer2 = 0
 totalAttackHuman = 0
 totalAttackAI = 0
 
-
 totalhitPlayer1 = 0
 totalhitPlayer2 = 0
 totalhitHuman = 0
 totalhitAI = 0
 
-
-
 totalMissedPlayer1 = 0
 totalMissedPlayer2 = 0
 totalMissedHuman = 0
 totalMissedAI = 0
-
 
 if __name__ == "__main__":
     import pygame
@@ -394,6 +390,11 @@ def trackRectsHuman(rects):
                         setupGamePlayAI()
 
 def fireAdjacent(shipHitAI):
+    """Fires UP, RIGHT, DOWN, LEFT from the most recent destroyed boat location
+        For MEDIUM AI
+    Args:
+        shipHitAI: shipHitAI is an array passed in with the current spot we want to hit
+    """
     #shipHitAI is an array passed in with the current spot we want to hit
     for coord in reversed(shipHitAI):
         print("in fireadj")
@@ -406,8 +407,6 @@ def fireAdjacent(shipHitAI):
         elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7))):
             return coord[0], coord[1]-1
     #if all of these are misses, medium needs to fire at another ranodm spot then call this again after the random shit is fired
-
-
 
 def trackRectsAI(rects, difficulty):
     """Allows the AI to fire
@@ -428,7 +427,6 @@ def trackRectsAI(rects, difficulty):
     global shipHitsAI
 
     hit_text = pygame.font.SysFont('Consolas', 40)
-
 
     if (difficulty == "easy"):
         #generate coordinate:
@@ -468,7 +466,6 @@ def trackRectsAI(rects, difficulty):
             totalMissedAI = totalMissedAI + 1
             if (gameState != "winner"):
                 setupGamePlayHuman()
-
 
     elif (difficulty == "medium"):
         #generate coordinate:
@@ -523,7 +520,6 @@ def trackRectsAI(rects, difficulty):
             if (gameState != "winner"):
                 setupGamePlayHuman()
 
-
     elif (difficulty == "hard"):
         print("in hard mode") #testing purposes
         cont = 1
@@ -552,7 +548,6 @@ def trackRectsAI(rects, difficulty):
                 break
             if (cont == 0):
                 break
-
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
         newPress = True
@@ -588,7 +583,7 @@ def printRects2(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsHuman(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
+    """Draws the squares on the board that have been hit or missed for player Human
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -603,7 +598,7 @@ def printRectsHuman(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsAI(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
+    """Draws the squares on the board that have been hit or missed for player AI
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -677,8 +672,8 @@ def trackPlacement(rects):
     global my_shipsAI
     newPress = True
     mouseX = 0
-
     mouseY = 0
+
     if pygame.mouse.get_pressed() == (1, 0, 0) and newPress:
         newPress = False
         mouseX, mouseY = pygame.mouse.get_pos()
@@ -755,7 +750,7 @@ def trackPlayButton(): #PLAY VS HUMAN
             setupPlaceBoats(1)
 
 def trackPlayButton_AI(): #PLAY VS AI
-    """ Tracks if the PLAY VS AI button on the welcome screen has been pressed. If it has, ????????????????"""
+    """ Tracks if the PLAY VS AI button on the welcome screen has been pressed"""
     global gameState
     global difficulty
 
@@ -886,7 +881,6 @@ def getSize():
             pygame.display.update()
 
     pygame.display.update()
-
 
 def trackQuitButton():
     """ Tracks if the Quit button on the welcome screen has been pressed. If it has, quitGame() is called"""
@@ -1067,6 +1061,11 @@ def setupPlaceBoatsHuman():
     gameState = "placeBoatsHuman"
 
 def setupPlaceBoatsAI():
+    """ Sets up initial graphics and variables for the placeBoats state for AI in human vs AI
+    Args:
+        None
+    """
+
     #places AI boats
     global my_shipsAI
     global opposing_shipHuman
@@ -1095,6 +1094,10 @@ def setupPlaceBoatsAI():
                     opposing_shipHuman.append(B.getCoordinates()[x])
 
 def generateBoatLocation(boatLength):
+    """ genereates a random location to place player AI's boats
+    Args:
+        boatLength: length of boat to be placed
+    """
     #helper function for placing AI boats
     boatDirection = random.randint(0,1)
     returnCoords = []
@@ -1255,6 +1258,7 @@ def setupGamePlayHuman():
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
+    """ sets gameState to be gamePlayAI """
     global gameState
     gameState = "gamePlayAI"
 
