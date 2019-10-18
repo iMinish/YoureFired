@@ -408,53 +408,62 @@ def trackRectsAI(rects, difficulty):
     hit_text = pygame.font.SysFont('Consolas', 40)
 
     if (difficulty == "easy"):
-        xCoord = random.randint(0, 7)
-        yCoord = random.randint(0, 7)
-        for i in range(0, 8):
-            for j in range(0, 8):
-                if (xCoord, yCoord) in opposing_shipAI and not (xCoord, yCoord) in rects_clickedAI:
-                    rects_hitAI.append((i, j))
-                    playerHuman.addToHitList(i, j)
-                    rects_clickedAI.append((i, j))
-                    pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
-                    pygame.display.update(rects[i][j])
-                    hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    pygame.time.delay(500)
-                    hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    print(rects_clickedAI)
-                    print("destroyed", playerAI.shipsDestroyed())
-                    #scoreBoard total attacked update
-                    totalAttackAI = totalAttackAI + 1
-                    #scoreBoard total hit update
-                    totalhitAI = totalhitAI + 1
-                    if playerHuman.shipsDestroyed() == numberOfBoats:
-                        winner = "Player AI"
-                        gameState = "winner"
-                        winState()
-                    setupGamePlayHuman()
-                elif not (xCoord, yCoord) in rects_clickedAI:
-                    rects_missedAI.append((i, j))
-                    rects_clickedAI.append((i, j))
-                    pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
-                    pygame.display.update(rects[i][j])
-                    hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    pygame.time.delay(500)
-                    hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    print(rects_clickedAI)
-                    pygame.time.delay(250)
-                    #scoreBoard total attacked update
-                    totalAttackAI = totalAttackAI + 1
-                    #scoreBoard total Missed update
-                    totalMissedAI = totalMissedAI + 1
-                    setupGamePlayHuman()
+        #generate coordinate:
+        xCoord = 0
+        yCoord = 0
+        goodCoord = 0
+        while (goodCoord == 0):
+            tempX = random.randint(0, 7)
+            tempY = random.randint(0, 7)
+            yCoord = random.randint(0, 7)
+            if ((xCoord, yCoord) not in rects_clickedAI):
+                xCoord = tempX
+                yCoord = tempY
+                goodCoord = 1
+        cont = 1
+        if (xCoord, yCoord) in opposing_shipAI:
+            rects_hitAI.append((xCoord, yCoord))
+            playerHuman.addToHitList(xCoord,yCoord)
+            rects_clickedAI.append((xCoord, yCoord))
+            #pygame.draw.rect(disp, (0, 0, 255), rects[xCoord][yCoord])
+            #pygame.display.update(rects[xCoord][yCoord])
+            #hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
+            #disp.blit(hit_text_display, (480, 540))
+            #pygame.display.update()
+            #pygame.time.delay(500)
+            #hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
+            #disp.blit(hit_text_display, (480, 540))
+            #pygame.display.update()
+            print(rects_clickedAI)
+            print("destroyed", playerAI.shipsDestroyed())
+            #scoreBoard total attacked update
+            totalAttackAI = totalAttackAI + 1
+            #scoreBoard total hit update
+            totalhitAI = totalhitAI + 1
+            if playerHuman.shipsDestroyed() == numberOfBoats:
+                winner = "Player AI"
+                gameState = "winner"
+                winState()
+            setupGamePlayHuman()
+        else:
+            rects_missedAI.append((xCoord, yCoord))
+            rects_clickedAI.append((xCoord, yCoord))
+            #pygame.draw.rect(disp, (0, 0, 255), rects[xCoord][yCoord])
+            #pygame.display.update(rects[xCoord][yCoord])
+            #hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
+            #disp.blit(hit_text_display, (480, 540))
+            #pygame.display.update()
+            #pygame.time.delay(500)
+            #hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
+            #disp.blit(hit_text_display, (480, 540))
+            #pygame.display.update()
+            print(rects_clickedAI)
+            pygame.time.delay(250)
+            #scoreBoard total attacked update
+            totalAttackAI = totalAttackAI + 1
+            #scoreBoard total Missed update
+            totalMissedAI = totalMissedAI + 1
+            setupGamePlayHuman()
     elif (difficulty == "medium"):
         if (not shipHitsAI):
             xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
@@ -1085,6 +1094,8 @@ def setupPlaceBoatsAI():
             print("Boat Placed")
             if gameState == "None":
                 playerAI.placeShip(B)
+                print("AI ship at") #testing
+                print(B.getCoordinates()) #testing
                 for x in range(len(B.getCoordinates())):
                     my_shipsAI.append(B.getCoordinates()[x])
                     opposing_shipHuman.append(B.getCoordinates()[x])
@@ -1428,9 +1439,9 @@ def winState():
         gameState = "winner"
 
         if(totalAttackAI > 0):
-            hit2 = ((totalhitPlayer2 / totalAttackAI) * 100)
+            hit2 = ((totalhitAI / totalAttackAI) * 100)
             hit2Percentage = round(hit2, 2)
-            missed2 = ((totalMissedPlayer2 / totalAttackAI) * 100)
+            missed2 = ((totalMissedAI / totalAttackAI) * 100)
             missed2Percentage = round(missed2, 2)
 
             text_Player2_Hit = "Hit in %: " + str(hit2Percentage)
@@ -1570,7 +1581,6 @@ if __name__ == "__main__":
                 rightGrid = createRects(500, 200)
                 board_cleared = True
         elif gameState == "gamePlayHuman":
-            print("GAME STATE HUMAN")
             if playerAI.shipsDestroyed() == num_destroyed:
                 winner = "Player Human"
                 gameState = "winner"
