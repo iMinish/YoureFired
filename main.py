@@ -374,17 +374,17 @@ def trackRectsHuman(rects):
                     #scoreBoard total Missed update
                     totalMissedHuman = totalMissedHuman + 1
 
-def fireAdjacent(shipHitsAI):
+#def fireAdjacent(shipHitsAI):
     #shipHitAI is an array passed in with the current spot we want to hit
-    for coord in reversed(shipHitAI):
-        if(((coord[0]-1,coord[1]) not in rects_clickedAI) and (((coord[0]-1) >= 0) and ((coord[0]-1) <= 7)))
-            return (coord[0]-1, coord[1])
-        elif(((coord[0],coord[1]+1) not in rects_clickedAI) and (((coord[1]+1) >= 0) and ((coord[1]+1) <= 7)))
-            return(coord[0], coord[1]+1)
-        elif(((coord[0]+1,coord[1]) not in rects_clickedAI) and (((coord[0]+1) >= 0) and ((coord[0]+1) <= 7)))
-            return (coord[0]+1, coord[1])
-        elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7)))
-            return(coord[0], coord[1]-1)
+    #for coord in reversed(shipHitAI):
+        #if(((coord[0]-1,coord[1]) not in rects_clickedAI) and (((coord[0]-1) >= 0) and ((coord[0]-1) <= 7)))
+            #return (coord[0]-1, coord[1])
+        #elif(((coord[0],coord[1]+1) not in rects_clickedAI) and (((coord[1]+1) >= 0) and ((coord[1]+1) <= 7)))
+            #return(coord[0], coord[1]+1)
+        #elif(((coord[0]+1,coord[1]) not in rects_clickedAI) and (((coord[0]+1) >= 0) and ((coord[0]+1) <= 7)))
+            #return (coord[0]+1, coord[1])
+        #elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7)))
+            #return(coord[0], coord[1]-1)
     #if all of these are misses, medium needs to fire at another ranodm spot then call this again after the random shit is fired
 
 
@@ -1243,7 +1243,8 @@ def setupGamePlayHuman():
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
-    #todo
+    global gameState
+    gameState = "gamePlayAI"
 
 def winState():
     """ Lets the player know that they won """
