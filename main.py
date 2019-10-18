@@ -98,7 +98,7 @@ def event_handler():
         if event.type == QUIT or (event.type == KEYDOWN and (event.key == K_ESCAPE or event.key == K_q)):
             quitGame()
 
-def isPointInRect(x, y, rect):
+def isPointInRect(x, y, rect): #CHECKS IF COORDINATE IS WITHIN RECTANGLE
     """Checks if a coordinate is within the bounds of a pygame.rect object
 
     Args:
@@ -111,10 +111,10 @@ def isPointInRect(x, y, rect):
     """
 
     if x < rect.x + rect.width and x > rect.x and y < rect.y + rect.height and y > rect.y:
-        return True
-    return False
+        return True # (x, y) is inside (rect.x, rect.y)
+    return False # (x, y) is NOT inside (rect.x, rect.y)
 
-def createRects(x, y):
+def createRects(x, y): #DRAWS THE BOARD
     """Creates an 8x8 grid of squares
 
     Args:
@@ -147,6 +147,7 @@ def createRects(x, y):
     pygame.display.update()
     return rects
 
+# CREATES A TEXT OBJECT
 def text_objects(text, font): #function used from https://pythonprogramming.net/pygame-start-menu-tutorial/
     """Creates a text object
 
@@ -158,7 +159,7 @@ def text_objects(text, font): #function used from https://pythonprogramming.net/
     textSurface = font.render(text, True, (255, 255, 255))
     return textSurface, textSurface.get_rect()
 
-def showboat1(rects):
+def showboat1(rects): #SHOWS PLAYER1'S BOATS
     """Shows player 1's own boats after pressing the toggle button
 
     Args:
@@ -171,7 +172,7 @@ def showboat1(rects):
                 pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
 
-def showboat2(rects):
+def showboat2(rects): #SHOWS PLAYERs'S BOATS
     """Shows player 2's own boats after pressing the toggle button
 
     Args:
