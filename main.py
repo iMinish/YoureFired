@@ -434,7 +434,7 @@ def trackRectsAI(rects, difficulty):
                         winner = "Player AI"
                         gameState = "winner"
                         winState()
-                    setupGamePlay1()
+                    setupGamePlayHuman()
                 elif not (xCoord, yCoord) in rects_clicked2:
                     rects_missed2.append((i, j))
                     rects_clicked2.append((i, j))
@@ -455,8 +455,11 @@ def trackRectsAI(rects, difficulty):
                     #scoreBoard total Missed update
                     totalMissedAI = totalMissedAI + 1
     elif (difficulty == "medium"):
-        if (not shipHitsAI):
-            xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
+            if (shipHitsAI):
+                xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
+            else:
+                xCoord = random.randint(0,7)
+                yCoord = random.randint(0,7)
             for i in range(0, 8):
                 for j in range(0, 8):
                     if (xCoord, yCoord) in opposing_shipAI and not (xCoord, yCoord) in rects_clickedAI:
@@ -483,9 +486,18 @@ def trackRectsAI(rects, difficulty):
                             gameState = "winner"
                             winState()
                         #if sunk, remove ship's coords from global shipList
-
+                        checkIfSunk = playerHuman.getShipList()
+                        isSunk = False
+                        for currentShip in checkIfSunk:
+                            shipsCoords = currentShip.getCoordinates()
+                            if (currentShip.checkDestroyed() and (xCoord,yCoord) in shipsCoords)): #CHECK
+                                isSunk = True
+                                for coord in shipCoords:
+                                    shipHitsAI.remove(coord) #CHECK
 
                         #else, add coord to global list
+                        if (isSunk == False):
+                            shipHitsAI.append()
                         setupGamePlayHuman()
 
                     elif not (xCoord, yCoord) in rects_clickedAI:
@@ -507,10 +519,7 @@ def trackRectsAI(rects, difficulty):
                         totalAttackAI= totalAttackAI + 1
                         #scoreBoard total Missed update
                         totalMissedAI = totalMissedAI + 1
-        else:
-            xCoord = random.randint(0, 8)
-            yCoord = random.randint(0, 8)
-            #if hit, add coordinate to global list
+
     elif (difficulty == "hard"):
         for (x, y) in opposing_ship2:
             if (not (x, y) in rects_clickedAI):
@@ -1230,7 +1239,7 @@ def setupGamePlayHuman():
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
-    #todo
+    #todo, not sure if needed
 
 def winState():
     """ Lets the player know that they won """
