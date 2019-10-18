@@ -435,7 +435,7 @@ def trackRectsAI(rects, difficulty):
         yCoord = random.randint(0, 7)
         for i in range(0, 8):
             for j in range(0, 8):
-                if (xCoord, yCoord) in opposing_ship2 and not (xCoord, yCoord) in rects_clicked2:
+                if (xCoord, yCoord) in opposing_ship2 and not (xCoord, yCoord) in rects_clickedAI:
                     rects_hit2.append((i, j))
                     player1.addToHitList(i, j)
                     rects_clicked2.append((i, j))
@@ -545,9 +545,12 @@ def trackRectsAI(rects, difficulty):
                         totalMissedAI = totalMissedAI + 1
 
     elif (difficulty == "hard"):
-        for (x, y) in opposing_ship2:
-            if (not (x, y) in rects_clickedAI):
-                rects_hit2.append((i, j))
+        print("in hard mode") #testing purposes
+        cont = 1
+        for (i, j) in opposing_shipAI:
+            if (not (i, j) in rects_clickedAI):
+                print("inside line 553") #testing purposes
+                rects_hitAI.append((i, j))
                 playerHuman.addToHitList(i, j)
                 rects_clickedAI.append((i, j))
                 pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
@@ -569,7 +572,15 @@ def trackRectsAI(rects, difficulty):
                     winner = "Player AI"
                     gameState = "winner"
                     winState()
+                    cont = 0
+                    break
+                print("about to cont")
                 setupGamePlayHuman()
+                cont = 0
+                break
+            if (cont == 0):
+                break
+            print("BROKEN")
 
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
@@ -1268,6 +1279,7 @@ def setupGamePlayHuman():
     disp.blit(toggle_display, (548, 200))
     leftGrid = createRects(200, 200)
     rightGrid = createRects(500, 200)
+    print("game state becoming human") #testing
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
@@ -1591,6 +1603,7 @@ if __name__ == "__main__":
                 rightGrid = createRects(500, 200)
                 board_cleared = True
         elif gameState == "gamePlayHuman":
+            print("GAME STATE HUMAN")
             if playerAI.shipsDestroyed() == num_destroyed:
                 winner = "Player Human"
                 gameState = "winner"
@@ -1629,6 +1642,7 @@ if __name__ == "__main__":
                 winner = "Player AI"
                 gameState = "winner"
                 winState()
+            print("callingTrackRectsAI") #for testing
             trackRectsAI(leftGrid, difficulty)
 
         elif gameState == "winner":
