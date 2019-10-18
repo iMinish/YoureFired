@@ -40,7 +40,6 @@ if __name__ == "__main__":
     draw_once = True
     gameState = "welcome"
     winner = "null"
-    difficulty = "null"
     num_destroyed = 0
     numberOfBoats = 0
     player1 = Player()
@@ -176,28 +175,6 @@ def showboat2(rects):
     for i in range(0, 8):
         for j in range(0, 8):
             if(i, j) in my_ships2:
-                pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
-                pygame.display.update(rects[i][j])
-
-def showboatHuman(rects):
-    """Shows player human's own boats after pressing the toggle button
-    Args:
-    rects: (8x8 array of pygame.Rect objects): the grid to check on
-    """
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if(i, j) in my_shipsHuman:
-                pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
-                pygame.display.update(rects[i][j])
-
-def showboatAI(rects):
-    """Shows player AI's own boats after pressing the toggle button
-    Args:
-    rects: (8x8 array of pygame.Rect objects): the grid to check on
-    """
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if(i, j) in my_shipsAI:
                 pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
 
@@ -397,18 +374,19 @@ def trackRectsHuman(rects):
                     #scoreBoard total Missed update
                     totalMissedHuman = totalMissedHuman + 1
 
-#def fireAdjacent(shipHitsAI):
+def fireAdjacent(shipHitsAI):
     #shipHitAI is an array passed in with the current spot we want to hit
+    for coord in reversed(shipHitAI):
+        if(((coord[0]-1,coord[1]) not in rects_clickedAI) and (((coord[0]-1) >= 0) and ((coord[0]-1) <= 7)))
+            return (coord[0]-1, coord[1])
+        elif(((coord[0],coord[1]+1) not in rects_clickedAI) and (((coord[1]+1) >= 0) and ((coord[1]+1) <= 7)))
+            return(coord[0], coord[1]+1)
+        elif(((coord[0]+1,coord[1]) not in rects_clickedAI) and (((coord[0]+1) >= 0) and ((coord[0]+1) <= 7)))
+            return (coord[0]+1, coord[1])
+        elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7)))
+            return(coord[0], coord[1]-1)
+    #if all of these are misses, medium needs to fire at another ranodm spot then call this again after the random shit is fired
 
-    #if("""able to fire above""")
-        #return CP above the passed in CP
-    #elif("""able to fire to the right""")
-        #return CP to the right of passed in CP
-    #elif("""able to fire below""")
-        #return CP below the passed in CP
-    #elif("""able to fire to the left""")
-        #return CP to the left of passed in CP
-    #else:
 
 
 def trackRectsAI(rects, difficulty):
@@ -426,7 +404,6 @@ def trackRectsAI(rects, difficulty):
     global totalAttackAI
     global totalhitAI
     global totalMissedAI
-    global shipHitsAI
 
     hit_text = pygame.font.SysFont('Consolas', 40)
 
@@ -458,7 +435,7 @@ def trackRectsAI(rects, difficulty):
                         winner = "Player AI"
                         gameState = "winner"
                         winState()
-                    setupGamePlayHuman()
+                    setupGamePlay1()
                 elif not (xCoord, yCoord) in rects_clicked2:
                     rects_missed2.append((i, j))
                     rects_clicked2.append((i, j))
@@ -479,11 +456,8 @@ def trackRectsAI(rects, difficulty):
                     #scoreBoard total Missed update
                     totalMissedAI = totalMissedAI + 1
     elif (difficulty == "medium"):
-            if (shipHitsAI):
-                xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
-            else:
-                xCoord = random.randint(0,7)
-                yCoord = random.randint(0,7)
+        if (not shipHitsAI):
+            xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
             for i in range(0, 8):
                 for j in range(0, 8):
                     if (xCoord, yCoord) in opposing_shipAI and not (xCoord, yCoord) in rects_clickedAI:
@@ -510,18 +484,9 @@ def trackRectsAI(rects, difficulty):
                             gameState = "winner"
                             winState()
                         #if sunk, remove ship's coords from global shipList
-                        checkIfSunk = playerHuman.getShipList()
-                        isSunk = False
-                        for currentShip in checkIfSunk:
-                            shipsCoords = currentShip.getCoordinates()
-                            if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
-                                isSunk = True
-                                for coord in shipCoords:
-                                    shipHitsAI.remove(coord) #CHECK
+
 
                         #else, add coord to global list
-                        if (isSunk == False):
-                            shipHitsAI.append()
                         setupGamePlayHuman()
 
                     elif not (xCoord, yCoord) in rects_clickedAI:
@@ -543,7 +508,10 @@ def trackRectsAI(rects, difficulty):
                         totalAttackAI= totalAttackAI + 1
                         #scoreBoard total Missed update
                         totalMissedAI = totalMissedAI + 1
-
+        else:
+            xCoord = random.randint(0, 8)
+            yCoord = random.randint(0, 8)
+            #if hit, add coordinate to global list
     elif (difficulty == "hard"):
         print("in hard mode") #testing purposes
         cont = 1
@@ -617,7 +585,7 @@ def printRects2(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsHuman(rects):
-    """Draws the squares on the board that have been hit or missed for player human
+    """Draws the squares on the board that have been hit or missed for player 1
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -632,7 +600,7 @@ def printRectsHuman(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsAI(rects):
-    """Draws the squares on the board that have been hit or missed for player AI, only used for testing
+    """Draws the squares on the board that have been hit or missed for player 1
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -786,24 +754,20 @@ def trackPlayButton(): #PLAY VS HUMAN
 def trackPlayButton_AI(): #PLAY VS AI
     """ Tracks if the PLAY VS AI button on the welcome screen has been pressed. If it has, ????????????????"""
     global gameState
-    global difficulty
 
     if pygame.mouse.get_pressed() == (1, 0, 0):
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .08, disp_height * .55, 260, 75)) and not numberOfBoats == 0: # PLAY VS EASY AI
             print("PLAY VS EASY AI CLICKED\n")
-            difficulty = "easy"
-            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
+            setupPlaceBoats(1) # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .35, disp_height * .55, 330, 75)) and not numberOfBoats == 0: # PLAY VS MEDIUM AI
             print("PLAY VS MEDIUM AI CLICKED\n")
-            difficulty = "medium"
-            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
+            setupPlaceBoats(1) # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .7, disp_height * .55, 270, 75)) and not numberOfBoats == 0: # PLAY VS HARD AI
             print("PLAY VS HARD AI CLICKED\n")
-            difficulty = "hard"
-            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
+            setupPlaceBoats(1) # need to change to handle which AI we are playing against
 
 def getSize():
     """Handles the user interface of selecting the size of the boats
@@ -1097,9 +1061,6 @@ def setupPlaceBoatsHuman():
 
 def setupPlaceBoatsAI():
     #places AI boats
-    global my_shipsAI
-    global opposing_shipHuman
-
     for i in range(1,numberOfBoats+1):
         B = Boat()
         goodCoords = 0
@@ -1107,20 +1068,19 @@ def setupPlaceBoatsAI():
             overlap = False
             spotsToCheck = []
             spotsToCheck = generateBoatLocation(i)
-            for x in range(len(spotsToCheck)):
-                if spotsToCheck[x] in playerAI.getCoordinateList():
+            for i in range(len(spotsToCheck)):
+                if spotsToCheck[i] in playerAI.getCoordinateList():
                     overlap = True
             if (overlap == False):
                 goodCoords = 1
 
-        if B.validPlace(spotsToCheck) and goodCoords == 1:
-            print("AI Boat Placed")
-            print(B.getCoordinates()) #for testing only
-            if gameState == "None":
+        if B.validPlace(spotsToCheck) and overlap == False:
+            print("Boat Placed")
+            if gameState == "placeBoatsHuman":
                 playerAI.placeShip(B)
-                for x in range(len(B.getCoordinates())):
-                    my_shipsAI.append(B.getCoordinates()[x])
-                    opposing_shipHuman.append(B.getCoordinates()[x])
+                for i in range(len(B.getCoordinates())):
+                    my_shipsAI.append(B.getCoordinates()[i])
+                    opposing_shipHuman.append(B.getCoordinates()[i])
 
 def generateBoatLocation(boatLength):
     #helper function for placing AI boats
@@ -1283,8 +1243,7 @@ def setupGamePlayHuman():
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
-    global gameState
-    gameState = "gamePlayAI"
+    #todo
 
 def winState():
     """ Lets the player know that they won """
