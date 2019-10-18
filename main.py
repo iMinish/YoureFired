@@ -40,6 +40,7 @@ if __name__ == "__main__":
     draw_once = True
     gameState = "welcome"
     winner = "null"
+    difficulty = "null"
     num_destroyed = 0
     numberOfBoats = 0
     player1 = Player()
@@ -175,6 +176,28 @@ def showboat2(rects):
     for i in range(0, 8):
         for j in range(0, 8):
             if(i, j) in my_ships2:
+                pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
+                pygame.display.update(rects[i][j])
+
+def showboatHuman(rects):
+    """Shows player human's own boats after pressing the toggle button
+    Args:
+    rects: (8x8 array of pygame.Rect objects): the grid to check on
+    """
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if(i, j) in my_shipsHuman:
+                pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
+                pygame.display.update(rects[i][j])
+
+def showboatAI(rects):
+    """Shows player AI's own boats after pressing the toggle button
+    Args:
+    rects: (8x8 array of pygame.Rect objects): the grid to check on
+    """
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if(i, j) in my_shipsAI:
                 pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
 
@@ -403,6 +426,7 @@ def trackRectsAI(rects, difficulty):
     global totalAttackAI
     global totalhitAI
     global totalMissedAI
+    global shipHitsAI
 
     hit_text = pygame.font.SysFont('Consolas', 40)
 
@@ -582,7 +606,7 @@ def printRects2(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsHuman(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
+    """Draws the squares on the board that have been hit or missed for player human
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -597,7 +621,7 @@ def printRectsHuman(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsAI(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
+    """Draws the squares on the board that have been hit or missed for player AI, only used for testing
     Args:
         rects (8x8 array of pygame.Rect objects): the grid to check on
     """
@@ -756,15 +780,18 @@ def trackPlayButton_AI(): #PLAY VS AI
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .08, disp_height * .55, 260, 75)) and not numberOfBoats == 0: # PLAY VS EASY AI
             print("PLAY VS EASY AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "easy"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .35, disp_height * .55, 330, 75)) and not numberOfBoats == 0: # PLAY VS MEDIUM AI
             print("PLAY VS MEDIUM AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "medium"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .7, disp_height * .55, 270, 75)) and not numberOfBoats == 0: # PLAY VS HARD AI
             print("PLAY VS HARD AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "hard"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
 def getSize():
     """Handles the user interface of selecting the size of the boats
@@ -1558,7 +1585,46 @@ if __name__ == "__main__":
                 rightGrid = createRects(500, 200)
                 board_cleared = True
         elif gameState == "gamePlayHuman":
-            #todo
+            if playerAI.shipsDestroyed() == num_destroyed:
+                winner = "Player Human"
+                gameState = "winner"
+                winState()
+            printRectsHuman(leftGrid)
+            printRectsAI(rightGrid)
+            trackRectsHuman(leftGrid)
+            track_toggle()
+
+            sunk_text = pygame.font.SysFont('Consolas', 30)
+            sunk_text_display = sunk_text.render("Battleboats you've sunk:", False, (0, 0, 0))
+            disp.blit(sunk_text_display, (340, 590))
+            pygame.display.update()
+            largeText = pygame.font.Font('freesansbold.ttf', 30)
+            i = 0
+            for index in range(0,numberOfBoats):
+                if playerAI.getShip(index).checkDestroyed():
+                    num = largeText.render("1x" + str(index + 1), False, (255, 0, 0))
+                    disp.blit(num, ((disp_width * .34 + i), (disp_height * .90)))
+                    pygame.display.update()
+                else:
+                    destroyed_num = largeText.render("1x" + str(index + 1), False, (255, 255, 255))
+                    disp.blit(destroyed_num, ((disp_width * .34 + i), (disp_height * .90)))
+                    pygame.display.update()
+                i = i + 87
+
+            if toggled and board_cleared:
+                showboatHuman(rightGrid)
+                board_cleared = False
+            if not toggled and not board_cleared:
+                clear_board(rightGrid)
+                rightGrid = createRects(500, 200)
+                board_cleared = True
+        elif gameState == "gamePlayAI":
+            if playerHuman.shipsDestroyed() == num_destroyed:
+                winner = "Player AI"
+                gameState = "winner"
+                winState()
+            trackRectsAI(leftGrid)
+
         elif gameState == "winner":
             winState()
         clock.tick(30)
