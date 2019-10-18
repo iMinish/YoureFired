@@ -398,7 +398,7 @@ def trackRectsHuman(rects):
                     totalMissedHuman = totalMissedHuman + 1
 
 def fireAdjacent(shipHitsAI):
-    #shipHitAI is an array passed in with the current spot we want to hit
+    shipHitAI is an array passed in with the current spot we want to hit
 
     if("""able to fire above""")
         #return CP above the passed in CP
@@ -514,7 +514,7 @@ def trackRectsAI(rects, difficulty):
                         isSunk = False
                         for currentShip in checkIfSunk:
                             shipsCoords = currentShip.getCoordinates()
-                            if (currentShip.checkDestroyed() and (xCoord,yCoord) in shipsCoords)): #CHECK
+                            if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
                                 isSunk = True
                                 for coord in shipCoords:
                                     shipHitsAI.remove(coord) #CHECK
@@ -1092,19 +1092,20 @@ def setupPlaceBoatsAI():
             overlap = False
             spotsToCheck = []
             spotsToCheck = generateBoatLocation(i)
-            for i in range(len(spotsToCheck)):
-                if spotsToCheck[i] in playerAI.getCoordinateList():
+            for x in range(len(spotsToCheck)):
+                if spotsToCheck[x] in playerAI.getCoordinateList(): #FIX
                     overlap = True
             if (overlap == False):
                 goodCoords = 1
 
-        if B.validPlace(spotsToCheck) and overlap == False:
-            print("Boat Placed")
+        if B.validPlace(spotsToCheck) and goodCoords == 1:
+            print("AI Boat Placed")
+            print(B.getCoordinates())
             if gameState == "placeBoatsHuman":
                 playerAI.placeShip(B)
-                for i in range(len(B.getCoordinates())):
-                    my_shipsAI.append(B.getCoordinates()[i])
-                    opposing_shipHuman.append(B.getCoordinates()[i])
+                for x in range(len(B.getCoordinates())):
+                    my_shipsAI.append(B.getCoordinates()[x])
+                    opposing_shipHuman.append(B.getCoordinates()[x])
 
 def generateBoatLocation(boatLength):
     #helper function for placing AI boats
@@ -1266,7 +1267,7 @@ def setupGamePlayHuman():
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
-    #todo, not sure if needed
+    todo, not sure if needed
 
 def winState():
     """ Lets the player know that they won """
