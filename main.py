@@ -478,19 +478,14 @@ def trackRectsAI(rects, difficulty):
                 winner = "Player AI"
                 gameState = "winner"
                 winState()
+            shipHitsAI.append()
             #if sunk, remove ship's coords from global shipList
             checkIfSunk = playerHuman.getShipList()
-            isSunk = False
             for currentShip in checkIfSunk:
                 shipsCoords = currentShip.getCoordinates()
                 if (currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
-                    isSunk = True
                     for coord in shipCoords:
                         shipHitsAI.remove(coord) #CHECK
-
-            #else, add coord to global list
-            if (isSunk == False):
-                shipHitsAI.append()
             setupGamePlayHuman()
 
         else:
