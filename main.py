@@ -1270,6 +1270,7 @@ def winState():
     disp.fill(l_blue)
     #Display the Winner of the game
 
+    ########### PLAYER 1 VS PLAYER 2 ############
     if(winner == "Player 1" or winner == "Player 2"):
         largeText = pygame.font.Font('freesansbold.ttf', 65)
         text = winner + " wins!"
@@ -1298,25 +1299,39 @@ def winState():
         #pygame.display.update() # updates pygame window
         gameState = "winner"
 
+        if(totalAttackPlayer1 > 0):
+            hit1 = ((totalhitPlayer1 / totalAttackPlayer1) * 100)
+            hit1Percentage = round(hit1, 2)
+            missed1 = ((totalMissedPlayer1 / totalAttackPlayer1) * 100)
+            missed1Percentage = round(missed1, 2)
 
-        hit1 = ((totalhitPlayer1 / totalAttackPlayer1) * 100)
-        hit1Percentage = round(hit1, 2)
-        missed1 = ((totalMissedPlayer1 / totalAttackPlayer1) * 100)
-        missed1Percentage = round(missed1, 2)
+            text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
+        else:
+            text_Player1_Hit = "Hit in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 1.3), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 1.3), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            pygame.display.update() # updates pygame window
+            gameState = "winner"
 
 
 
@@ -1370,6 +1385,8 @@ def winState():
             pygame.display.update() # updates pygame window
             gameState = "winner"
 
+    ############ HUMAN VS AI ############
+
     if(winner == "Player Human" or winner == "Player AI"):
         largeText = pygame.font.Font('freesansbold.ttf', 65)
         text = winner + " wins!"
@@ -1379,7 +1396,7 @@ def winState():
         #pygame.display.update()
         gameState = "winner"
 
-
+        
         #Score board for Player Human
         largeText_2 = pygame.font.Font('freesansbold.ttf', 53)
         text_Player1 = "Player Human"
@@ -1398,25 +1415,40 @@ def winState():
         #pygame.display.update() # updates pygame window
         gameState = "winner"
 
+        if(totalAttackHuman > 0):
+            hit1 = ((totalhitHuman / totalAttackHuman) * 100)
+            hit1Percentage = round(hit1, 2)
+            missed1 = ((totalMissedHuman / totalAttackHuman) * 100)
+            missed1Percentage = round(missed1, 2)
 
-        hit1 = ((totalhitHuman / totalAttackHuman) * 100)
-        hit1Percentage = round(hit1, 2)
-        missed1 = ((totalMissedHuman / totalAttackHuman) * 100)
-        missed1Percentage = round(missed1, 2)
+            text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
+        else:
+            text_Player1_Hit = "Hit in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
+
 
 
 
