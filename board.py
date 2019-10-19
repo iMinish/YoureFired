@@ -2,63 +2,49 @@ from boats import Boat
 
 class board:
     def __init__(self, rowSize, colSize):
+        """
+        Initialize arguments
+        Args:
+        rowSize (int): number of rows
+        colSize (int): number of columns
+        Returns:
+        None
+        """
         self.rowSize = rowSize
         self.colSize = colSize
         self.boardStorage = [[0 for y in range(colSize)] for x in range(rowSize)]
         self.hits = [[False for y in range(colSize)] for x in range(rowSize)]
         self.misses = [[False for y in range(colSize)] for x in range(rowSize)]
 
-    def populateBoard(self, boatlist):
-        """populates the board with boats
-        Args:
-            boatlist: list of boats to populate the board with
+    def getSize(self):
         """
-        for boat in boatlist:
-            for coordinate in boat.getCoordinates():
-                self.boardStorage[coordinate[0]][coordinate[1]] = 1
-
-    def markMiss(self, xPos, yPos):
-        """marks a MISS on the board
+        Gets size of the board
         Args:
-            xPos (int): the x position for the tile to mark
-            yPos (int): the y position for the tile to mark
-
+        None
         Returns:
-            True if there is a miss to mark
+        Size of the board
         """
-        self.misses[xPos][yPos] = True
+        return(self.rowSize, self.colSize)
 
-    def markHit(self, xPos, yPos):
-        """marks a HIT on the board
-        Args:
-            xPos (int): the x position for the tile to mark
-            yPos (int): the y position for the tile to mark
-
-        Returns:
-            True if there is a hit to mark
+    def isBoat(self, xPos, yPos):
         """
-        self.hits[xPos][yPos] = True
-
-    def isMiss(self, xPos, yPos):
-        """Checks if there is a miss at a given square
+        Checks if there is a boat tile at a given square
         Args:
         xPos (int): the x position for the tile to check
         yPos (int): the y position for the tile to check
-
         Returns:
-        True if there is a miss
+        True if there is a boat at the given tile
         """
-        if(self.misses[xPos][yPos] == True):
+        if(self.boardStorage[xPos][yPos] == 1):
             return True
         return False
 
     def isHitt(self, xPos, yPos):
-        """Checks if there is a hit at a given square
-
+        """
+        Checks if there is a hit at a given square
         Args:
         xPos (int): the x position for the tile to check
         yPos (int): the y position for the tile to check
-
         Returns:
         True if there is a hit
         """
@@ -67,16 +53,60 @@ class board:
         else:
             return False
 
-    def getSize(self):
-        """Returns size of the board
-
-        Returns:
-        Size of the board
+    def isMiss(self, xPos, yPos):
         """
-        return (self.rowSize, self.colSize)
+        Checks if there is a miss at a given square
+        Args:
+        xPos (int): the x position for the tile to check
+        yPos (int): the y position for the tile to check
+        Returns:
+        True if there is a miss
+        """
+        if(self.misses[xPos][yPos] == True):
+            return True
+        return False
+
+    def markHit(self, xPos, yPos):
+        """
+        Marks a HIT on the board
+        Args:
+        xPos (int): the x position for the tile to mark
+        yPos (int): the y position for the tile to mark
+        Returns:
+        True if there is a hit to mark
+        """
+        self.hits[xPos][yPos] = True
+
+    def markMiss(self, xPos, yPos):
+        """
+        Marks a MISS on the board
+        Args:
+        xPos (int): the x position for the tile to mark
+        yPos (int): the y position for the tile to mark
+        Returns:
+        True if there is a miss to mark
+        """
+        self.misses[xPos][yPos] = True
+
+    def populateBoard(self, boatlist):
+        """
+        Populates the board with boats
+        Args:
+        boatlist: list of boats to populate the board with
+        Returns:
+        None
+        """
+        for boat in boatlist:
+            for coordinate in boat.getCoordinates():
+                self.boardStorage[coordinate[0]][coordinate[1]] = 1
 
     def testBoard(self):
-        """Prints out the board for testing purposes
+        """
+        Prints out the board for testing purposes
+        Args:
+        None
+        Returns:
+        None
         """
         for x in range(self.rowSize):
             print(self.boardStorage[x])
@@ -84,17 +114,3 @@ class board:
             print(self.misses[x])
         for x in range(self.rowSize):
             print(self.hits[x])
-
-    def isBoat(self, xPos, yPos):
-        """Checks if there is a boat tile at a given square
-
-        Args:
-        xPos (int): the x position for the tile to check
-        yPos (int): the y position for the tile to check
-
-        Returns:
-        True if there is a boats at the given tile
-        """
-        if(self.boardStorage[xPos][yPos] == 1):
-            return True
-        return False
