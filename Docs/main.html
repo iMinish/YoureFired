@@ -18,89 +18,266 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
 
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-clear_board"><strong>clear_board</strong></a>(rects)</dt><dd><tt>Clears&nbsp;the&nbsp;board&nbsp;of&nbsp;all&nbsp;squares&nbsp;-&nbsp;intended&nbsp;to&nbsp;be&nbsp;used&nbsp;after&nbsp;showing&nbsp;the&nbsp;players&nbsp;own&nbsp;boats<br>
-&nbsp;<br>
+
+<td width="100%"><dl><dt><a name="-clear_board"><strong>clear_board</strong></a>(rects)</dt>
+<dd><tt>Clears&nbsp;the&nbsp;board&nbsp;of&nbsp;all&nbsp;squares&nbsp;-&nbsp;intended&nbsp;to&nbsp;be&nbsp;used&nbsp;after&nbsp;showing&nbsp;the&nbsp;players&nbsp;own&nbsp;boats<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-createRects"><strong>createRects</strong></a>(x, y)</dt><dd><tt>Creates&nbsp;an&nbsp;8x8&nbsp;grid&nbsp;of&nbsp;squares<br>
-&nbsp;<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-createRects"><strong>createRects</strong></a>(x, y)</dt>
+<dd><tt>Creates&nbsp;an&nbsp;8x8&nbsp;grid&nbsp;of&nbsp;squares<br>
 Args:<br>
 x&nbsp;(int):&nbsp;the&nbsp;x&nbsp;position&nbsp;for&nbsp;the&nbsp;top&nbsp;right&nbsp;corner&nbsp;of&nbsp;the&nbsp;grid&nbsp;to&nbsp;start&nbsp;at<br>
 y&nbsp;(int):&nbsp;the&nbsp;y&nbsp;position&nbsp;for&nbsp;the&nbsp;top&nbsp;right&nbsp;corner&nbsp;of&nbsp;the&nbsp;grid&nbsp;to&nbsp;start&nbsp;at<br>
-&nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects</tt></dd></dl>
- <dl><dt><a name="-event_handler"><strong>event_handler</strong></a>()</dt><dd><tt>Checks&nbsp;for&nbsp;different&nbsp;pygame&nbsp;events</tt></dd></dl>
- <dl><dt><a name="-getSize"><strong>getSize</strong></a>()</dt><dd><tt>Handles&nbsp;the&nbsp;user&nbsp;interface&nbsp;of&nbsp;selecting&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;boats<br>
-&nbsp;<br>
+8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects</tt></dd></dl>
+
+<dl><dt><a name="-event_handler"><strong>event_handler</strong></a>()</dt>
+<dd><tt>Checks&nbsp;for&nbsp;different&nbsp;pygame&nbsp;events<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-fireAdjacent"><strong>fireAdjacent</strong></a>()</dt>
+<dd><tt>Fires&nbsp;UP,&nbsp;RIGHT,&nbsp;DOWN,&nbsp;LEFT&nbsp;from&nbsp;the&nbsp;most&nbsp;recent&nbsp;destroyed&nbsp;boat&nbsp;location<br>
+Args:<br>
+shipHitAI:&nbsp;shipHitAI&nbsp;is&nbsp;an&nbsp;array&nbsp;passed&nbsp;in&nbsp;with&nbsp;the&nbsp;current&nbsp;spot&nbsp;we&nbsp;want&nbsp;to&nbsp;hit<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-generateBoatLocation"><strong>generateBoatLocation</strong></a>()</dt>
+<dd><tt>Generates&nbsp;a&nbsp;random&nbsp;location&nbsp;to&nbsp;place&nbsp;player&nbsp;AI's&nbsp;boats<br>
+Args:<br>
+boatLength:&nbsp;length&nbsp;of&nbsp;boat&nbsp;to&nbsp;be&nbsp;placed<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-getSize"><strong>getSize</strong></a>()</dt>
+<dd><tt>Handles&nbsp;the&nbsp;user&nbsp;interface&nbsp;of&nbsp;selecting&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;boats<br>
 Args:<br>
 None<br>
 Returns:<br>
 size&nbsp;-&nbsp;Number&nbsp;of&nbsp;boats</tt></dd></dl>
- <dl><dt><a name="-isPointInRect"><strong>isPointInRect</strong></a>(x, y, rect)</dt><dd><tt>Checks&nbsp;if&nbsp;a&nbsp;coordinate&nbsp;is&nbsp;within&nbsp;the&nbsp;bounds&nbsp;of&nbsp;a&nbsp;pygame.rect&nbsp;object<br>
-&nbsp;<br>
+
+<dl><dt><a name="-isPointInRect"><strong>isPointInRect</strong></a>(x, y, rect)</dt>
+<dd><tt>Checks&nbsp;if&nbsp;a&nbsp;coordinate&nbsp;is&nbsp;within&nbsp;the&nbsp;bounds&nbsp;of&nbsp;a&nbsp;pygame.rect&nbsp;object<br>
 Args:<br>
 x&nbsp;(float):&nbsp;x&nbsp;coordinate&nbsp;to&nbsp;check<br>
 y&nbsp;(float):&nbsp;y&nbsp;coordinate&nbsp;to&nbsp;check<br>
 rect&nbsp;(pygame.Rect):&nbsp;object&nbsp;to&nbsp;see&nbsp;if&nbsp;x&nbsp;any&nbsp;y&nbsp;are&nbsp;in<br>
-&nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;x&nbsp;and&nbsp;y&nbsp;are&nbsp;in&nbsp;rect,&nbsp;False&nbsp;otherwise</tt></dd></dl>
- <dl><dt><a name="-printRects1"><strong>printRects1</strong></a>(rects)</dt><dd><tt>Draws&nbsp;the&nbsp;squares&nbsp;on&nbsp;the&nbsp;board&nbsp;that&nbsp;have&nbsp;been&nbsp;hit&nbsp;or&nbsp;missed&nbsp;for&nbsp;player&nbsp;1<br>
-&nbsp;<br>
+bool:&nbsp;True&nbsp;if&nbsp;x&nbsp;and&nbsp;y&nbsp;are&nbsp;in&nbsp;rect,&nbsp;False&nbsp;otherwise</tt></dd></dl>
+
+<dl><dt><a name="-printRects1"><strong>printRects1</strong></a>(rects)</dt>
+<dd><tt>Draws&nbsp;the&nbsp;squares&nbsp;on&nbsp;the&nbsp;board&nbsp;that&nbsp;have&nbsp;been&nbsp;hit&nbsp;or&nbsp;missed&nbsp;for&nbsp;player&nbsp;1<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-printRects2"><strong>printRects2</strong></a>(rects)</dt><dd><tt>Draws&nbsp;the&nbsp;squares&nbsp;on&nbsp;the&nbsp;board&nbsp;that&nbsp;have&nbsp;been&nbsp;hit&nbsp;or&nbsp;missed&nbsp;for&nbsp;player&nbsp;2<br>
-&nbsp;<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-printRects2"><strong>printRects2</strong></a>(rects)</dt>
+<dd><tt>Draws&nbsp;the&nbsp;squares&nbsp;on&nbsp;the&nbsp;board&nbsp;that&nbsp;have&nbsp;been&nbsp;hit&nbsp;or&nbsp;missed&nbsp;for&nbsp;player&nbsp;2<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-quitGame"><strong>quitGame</strong></a>()</dt><dd><tt>Closes&nbsp;the&nbsp;game&nbsp;window</tt></dd></dl>
- <dl><dt><a name="-setupGamePlay1"><strong>setupGamePlay1</strong></a>()</dt><dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;gamePlay&nbsp;state</tt></dd></dl>
- <dl><dt><a name="-setupGamePlay2"><strong>setupGamePlay2</strong></a>()</dt><dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;gamePlay&nbsp;state</tt></dd></dl>
- <dl><dt><a name="-setupPlaceBoats"><strong>setupPlaceBoats</strong></a>(whichPlayer)</dt><dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;placeBoats&nbsp;state<br>
-&nbsp;<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-printRectsAI"><strong>printRectsAI</strong></a>(rects)</dt>
+<dd><tt>Draws&nbsp;the&nbsp;squares&nbsp;on&nbsp;the&nbsp;board&nbsp;that&nbsp;have&nbsp;been&nbsp;hit&nbsp;or&nbsp;missed&nbsp;for&nbsp;player&nbsp;AI<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;whichPlayer&nbsp;(int):&nbsp;1&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoats&nbsp;state&nbsp;for&nbsp;player&nbsp;1,&nbsp;2&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoates&nbsp;satate&nbsp;for&nbsp;player&nbsp;2</tt></dd></dl>
- <dl><dt><a name="-setupWelcome"><strong>setupWelcome</strong></a>()</dt><dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;welcome&nbsp;state</tt></dd></dl>
- <dl><dt><a name="-showSwitchPlayers"><strong>showSwitchPlayers</strong></a>(originalTime)</dt><dd><tt>Displays&nbsp;the&nbsp;screen&nbsp;that&nbsp;tells&nbsp;players&nbsp;to&nbsp;switch.&nbsp;Gives&nbsp;players&nbsp;three&nbsp;seconds&nbsp;to&nbsp;do&nbsp;so.<br>
-&nbsp;<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-printRectsHuman"><strong>printRectsHuman</strong></a>(rects)</dt>
+<dd><tt>Draws&nbsp;the&nbsp;squares&nbsp;on&nbsp;the&nbsp;board&nbsp;that&nbsp;have&nbsp;been&nbsp;hit&nbsp;or&nbsp;missed&nbsp;for&nbsp;player&nbsp;Human<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;originalTime&nbsp;(pygame.time.get_ticks()):&nbsp;represents&nbsp;the&nbsp;original&nbsp;time&nbsp;(in&nbsp;systicks,&nbsp;represented&nbsp;as&nbsp;int)<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-quitGame"><strong>quitGame</strong></a>()</dt>
+<dd><tt>Closes&nbsp;the&nbsp;game&nbsp;window<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupGamePlay1"><strong>setupGamePlay1</strong></a>()</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;gamePlay&nbsp;state<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupGamePlay2"><strong>setupGamePlay2</strong></a>()</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;gamePlay&nbsp;state<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupGamePlayAI"><strong>setupGamePlayAI</strong></a>()</dt>
+<dd><tt>Sets&nbsp;gameState&nbsp;to&nbsp;be&nbsp;gamePlayAI<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupGamePlayHuman"><strong>setupGamePlayHuman</strong></a>()</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;gamePlay&nbsp;state<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupPlaceBoats"><strong>setupPlaceBoats</strong></a>(whichPlayer)</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;placeBoats&nbsp;state<br>
+Args:<br>
+whichPlayer&nbsp;(int):&nbsp;1&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoats&nbsp;state&nbsp;for&nbsp;player&nbsp;1,&nbsp;2&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoates&nbsp;satate&nbsp;for&nbsp;player&nbsp;2
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupPlaceBoatsAI"><strong>setupPlaceBoatsAI</strong></a>(whichPlayer)</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;placeBoats&nbsp;state&nbsp;for&nbsp;AI&nbsp;in&nbsp;human&nbsp;vs&nbsp;AI<br>
+Args:<br>
+whichPlayer&nbsp;(int):&nbsp;1&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoats&nbsp;state&nbsp;for&nbsp;player&nbsp;1,&nbsp;2&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoates&nbsp;satate&nbsp;for&nbsp;player&nbsp;2
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupPlaceBoatsHuman"><strong>setupPlaceBoatsHuman</strong></a>(whichPlayer)</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;placeBoats&nbsp;state&nbsp;for&nbsp;Human&nbsp;in&nbsp;human&nbsp;vs&nbsp;AI<br>
+Args:<br>
+whichPlayer&nbsp;(int):&nbsp;1&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoats&nbsp;state&nbsp;for&nbsp;player&nbsp;1,&nbsp;2&nbsp;-&gt;&nbsp;setup&nbsp;the&nbsp;placeBoates&nbsp;satate&nbsp;for&nbsp;player&nbsp;2
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-setupWelcome"><strong>setupWelcome</strong></a>()</dt>
+<dd><tt>Sets&nbsp;up&nbsp;initial&nbsp;graphics&nbsp;and&nbsp;variables&nbsp;for&nbsp;the&nbsp;welcome&nbsp;state<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-showSwitchPlayers"><strong>showSwitchPlayers</strong></a>(originalTime)</dt>
+<dd><tt>Displays&nbsp;the&nbsp;screen&nbsp;that&nbsp;tells&nbsp;players&nbsp;to&nbsp;switch.&nbsp;Gives&nbsp;players&nbsp;three&nbsp;seconds&nbsp;to&nbsp;do&nbsp;so.<br>
+Args:<br>
+originalTime&nbsp;(pygame.time.get_ticks()):&nbsp;represents&nbsp;the&nbsp;original&nbsp;time&nbsp;(in&nbsp;systicks,&nbsp;represented&nbsp;as&nbsp;int)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;this&nbsp;method&nbsp;was&nbsp;called.&nbsp;It&nbsp;is&nbsp;used&nbsp;agains&nbsp;the&nbsp;current<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time&nbsp;in&nbsp;systics&nbsp;to&nbsp;see&nbsp;if&nbsp;three&nbsp;seconds&nbsp;has&nbsp;passed</tt></dd></dl>
- <dl><dt><a name="-showboat1"><strong>showboat1</strong></a>(rects)</dt><dd><tt>Shows&nbsp;player&nbsp;1's&nbsp;own&nbsp;boats&nbsp;after&nbsp;pressing&nbsp;the&nbsp;toggle&nbsp;button<br>
-&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time&nbsp;in&nbsp;systics&nbsp;to&nbsp;see&nbsp;if&nbsp;three&nbsp;seconds&nbsp;has&nbsp;passed<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-showboat1"><strong>showboat1</strong></a>(rects)</dt>
+<dd><tt>Shows&nbsp;player&nbsp;1's&nbsp;own&nbsp;boats&nbsp;after&nbsp;pressing&nbsp;the&nbsp;toggle&nbsp;button<br>
 Args:<br>
-rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-showboat2"><strong>showboat2</strong></a>(rects)</dt><dd><tt>Shows&nbsp;player&nbsp;2's&nbsp;own&nbsp;boats&nbsp;after&nbsp;pressing&nbsp;the&nbsp;toggle&nbsp;button<br>
-&nbsp;<br>
+rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-showboat2"><strong>showboat2</strong></a>(rects)</dt>
+<dd><tt>Shows&nbsp;player&nbsp;2's&nbsp;own&nbsp;boats&nbsp;after&nbsp;pressing&nbsp;the&nbsp;toggle&nbsp;button<br>
 Args:<br>
-rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-text_objects"><strong>text_objects</strong></a>(text, font)</dt><dd><tt>Creates&nbsp;a&nbsp;text&nbsp;object<br>
-&nbsp;<br>
+rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-showboatHuman"><strong>showboatHuman</strong></a>(rects)</dt>
+<dd><tt>Shows&nbsp;player&nbsp;human's&nbsp;own&nbsp;boats&nbsp;after&nbsp;pressing&nbsp;the&nbsp;toggle&nbsp;button<br>
+Args:<br>
+rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-text_objects"><strong>text_objects</strong></a>(text, font)</dt>
+<dd><tt>Creates&nbsp;a&nbsp;text&nbsp;object<br>
 Args:<br>
 text:&nbsp;the&nbsp;string&nbsp;to&nbsp;display<br>
-font:&nbsp;the&nbsp;style&nbsp;of&nbsp;the&nbsp;text</tt></dd></dl>
- <dl><dt><a name="-trackPlacement"><strong>trackPlacement</strong></a>(rects)</dt><dd><tt>tracks&nbsp;the&nbsp;placement&nbsp;of&nbsp;boats&nbsp;on&nbsp;the&nbsp;placeBoats&nbsp;screens&nbsp;for&nbsp;player&nbsp;1&nbsp;and&nbsp;2<br>
-&nbsp;<br>
+font:&nbsp;the&nbsp;style&nbsp;of&nbsp;the&nbsp;text<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackPlacement"><strong>trackPlacement</strong></a>(rects)</dt>
+<dd><tt>tracks&nbsp;the&nbsp;placement&nbsp;of&nbsp;boats&nbsp;on&nbsp;the&nbsp;placeBoats&nbsp;screens&nbsp;for&nbsp;player&nbsp;1&nbsp;and&nbsp;2<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-trackPlayButton"><strong>trackPlayButton</strong></a>()</dt><dd><tt>Tracks&nbsp;if&nbsp;the&nbsp;Play&nbsp;button&nbsp;on&nbsp;the&nbsp;welcome&nbsp;screen&nbsp;has&nbsp;been&nbsp;pressed.&nbsp;If&nbsp;it&nbsp;has,&nbsp;<a href="#-setupPlaceBoats">setupPlaceBoats</a>(1)&nbsp;is&nbsp;called</tt></dd></dl>
- <dl><dt><a name="-trackQuitButton"><strong>trackQuitButton</strong></a>()</dt><dd><tt>Tracks&nbsp;if&nbsp;the&nbsp;Quit&nbsp;button&nbsp;on&nbsp;the&nbsp;welcome&nbsp;screen&nbsp;has&nbsp;been&nbsp;pressed.&nbsp;If&nbsp;it&nbsp;has,&nbsp;<a href="#-quitGame">quitGame</a>()&nbsp;is&nbsp;called</tt></dd></dl>
- <dl><dt><a name="-trackRects1"><strong>trackRects1</strong></a>(rects)</dt><dd><tt>Tracks&nbsp;when&nbsp;a&nbsp;single&nbsp;square&nbsp;in&nbsp;a&nbsp;grid&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse&nbsp;for&nbsp;player&nbsp;1<br>
-&nbsp;<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackPlayButton"><strong>trackPlayButton</strong></a>()</dt>
+<dd><tt>Tracks&nbsp;if&nbsp;the&nbsp;Play&nbsp;button&nbsp;on&nbsp;the&nbsp;welcome&nbsp;screen&nbsp;has&nbsp;been&nbsp;pressed.&nbsp;If&nbsp;it&nbsp;has,&nbsp;<a href="#-setupPlaceBoats">setupPlaceBoats</a>(1)&nbsp;is&nbsp;called<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-trackRects2"><strong>trackRects2</strong></a>(rects)</dt><dd><tt>Tracks&nbsp;when&nbsp;a&nbsp;single&nbsp;square&nbsp;in&nbsp;a&nbsp;grid&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse&nbsp;for&nbsp;player&nbsp;2<br>
-&nbsp;<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackPlayButton_AI"><strong>trackPlayButton_AI</strong></a>()</dt>
+<dd><tt>Tracks&nbsp;if&nbsp;the&nbsp;PLAY&nbsp;VS&nbsp;AI&nbsp;button&nbsp;on&nbsp;the&nbsp;welcome&nbsp;screen&nbsp;has&nbsp;been&nbsp;pressed.&nbsp;If&nbsp;it&nbsp;has,&nbsp;<a href="#-setupPlaceBoats">setupPlaceBoats</a>(1)&nbsp;is&nbsp;called<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on</tt></dd></dl>
- <dl><dt><a name="-track_toggle"><strong>track_toggle</strong></a>()</dt><dd><tt>Tracks&nbsp;when&nbsp;the&nbsp;toggle&nbsp;square&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse</tt></dd></dl>
- <dl><dt><a name="-updateBoatToPlaceText"><strong>updateBoatToPlaceText</strong></a>(size)</dt><dd><tt>Every&nbsp;time&nbsp;this&nbsp;is&nbsp;called,&nbsp;the&nbsp;text&nbsp;that&nbsp;says&nbsp;"Boat&nbsp;size&nbsp;to&nbsp;place..."&nbsp;on&nbsp;gameState&nbsp;=&nbsp;"placeBoats1"<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackQuitButton"><strong>trackQuitButton</strong></a>()</dt>
+<dd><tt>Tracks&nbsp;if&nbsp;the&nbsp;Quit&nbsp;button&nbsp;on&nbsp;the&nbsp;welcome&nbsp;screen&nbsp;has&nbsp;been&nbsp;pressed.&nbsp;If&nbsp;it&nbsp;has,&nbsp;<a href="#-quitGame">quitGame</a>()&nbsp;is&nbsp;called<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackRects1"><strong>trackRects1</strong></a>(rects)</dt>
+<dd><tt>Tracks&nbsp;when&nbsp;a&nbsp;single&nbsp;square&nbsp;in&nbsp;a&nbsp;grid&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse&nbsp;for&nbsp;player&nbsp;1<br>
+Args:<br>
+rects:&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackRects2"><strong>trackRects2</strong></a>(rects)</dt>
+<dd><tt>Tracks&nbsp;when&nbsp;a&nbsp;single&nbsp;square&nbsp;in&nbsp;a&nbsp;grid&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse&nbsp;for&nbsp;player&nbsp;2<br>
+Args:<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackRectsAI"><strong>trackRectsAI</strong></a>(rects, difficulty)</dt>
+<dd><tt>Allows&nbsp;the&nbsp;AI&nbsp;to&nbsp;fire<br>
+Args:<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+difficulty&nbsp;(string):&nbsp;difficulty&nbsp;setting&nbsp;for&nbsp;AI<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-trackRectsHuman"><strong>trackRectsHuman</strong></a>(rects)</dt>
+<dd><tt>Tracks&nbsp;when&nbsp;a&nbsp;single&nbsp;square&nbsp;in&nbsp;a&nbsp;grid&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse&nbsp;for&nbsp;player&nbsp;human<br>
+Args:<br>
+rects&nbsp;(8x8&nbsp;array&nbsp;of&nbsp;pygame.Rect&nbsp;objects):&nbsp;the&nbsp;grid&nbsp;to&nbsp;check&nbsp;on<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-track_toggle"><strong>track_toggle</strong></a>()</dt>
+<dd><tt>Tracks&nbsp;when&nbsp;the&nbsp;toggle&nbsp;square&nbsp;is&nbsp;pressed&nbsp;by&nbsp;the&nbsp;mouse<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-updateBoatToPlaceText"><strong>updateBoatToPlaceText</strong></a>(size)</dt>
+<dd><tt>Every&nbsp;time&nbsp;this&nbsp;is&nbsp;called,&nbsp;the&nbsp;text&nbsp;that&nbsp;says&nbsp;"Boat&nbsp;size&nbsp;to&nbsp;place..."&nbsp;on&nbsp;gameState&nbsp;=&nbsp;"placeBoats1"<br>
 &nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;gameState&nbsp;=&nbsp;"placeBoats2"&nbsp;will&nbsp;get&nbsp;redrawn&nbsp;with&nbsp;the&nbsp;new&nbsp;size&nbsp;shown<br>
-&nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;size&nbsp;(int):&nbsp;should&nbsp;corresponds&nbsp;to&nbsp;size&nbsp;of&nbsp;current&nbsp;boat&nbsp;to&nbsp;place&nbsp;(e.g.&nbsp;global&nbsp;placeNumber)</tt></dd></dl>
- <dl><dt><a name="-winState"><strong>winState</strong></a>()</dt><dd><tt>Lets&nbsp;the&nbsp;player&nbsp;know&nbsp;that&nbsp;they&nbsp;won</tt></dd></dl>
+size&nbsp;(int):&nbsp;should&nbsp;corresponds&nbsp;to&nbsp;size&nbsp;of&nbsp;current&nbsp;boat&nbsp;to&nbsp;place&nbsp;(e.g.&nbsp;global&nbsp;placeNumber)<br>
+Returns:<br>
+None</tt></dd></dl>
+
+<dl><dt><a name="-winState"><strong>winState</strong></a>()</dt>
+<dd><tt>Lets&nbsp;the&nbsp;player&nbsp;know&nbsp;that&nbsp;they&nbsp;won<br>
+Args:<br>
+None<br>
+Returns:<br>
+None</tt></dd></dl>
+
 </td></tr></table>
 </body></html>

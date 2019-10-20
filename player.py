@@ -4,13 +4,13 @@ import copy
 
 class Player:
 	def __init__(self):
-	    """
-	    Initialize arguments
-	    Args:
-	    None
+		"""
+		Initialize arguments
+		Args:
+		None
 		Returns:
 		None
-	    """
+		"""
 		# this player's ships
 		self.shipList = []
 		self.shipCoordinateList = []
