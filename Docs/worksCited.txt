@@ -47,3 +47,12 @@
 *    Availability: https://freesound.org/people/InspectorJ/sounds/406048/
 *
 ***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Battleship (EECS448-Project1)
+*    Author: Nolan Blankenau, Dawson Frick, Aaron Gearhart, Harry Heeb, Nick North
+*    Date: September 27, 2019 (Project 1 assigned due date)
+*    Code version: Uses Pygame 1.9.6 AND Python 3.7.4
+*    Availability: https://github.com/apgearhart1/EECS448-Project1
+*
+***************************************************************************************/
