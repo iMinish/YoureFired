@@ -15,3 +15,35 @@
 *    Availability: https://pythonprogramming.net/pygame-start-menu-tutorial/
 *
 ***************************************************************************************/
+
+/***************************************************************************************
+*    Title: countdown.wav
+*    Author: bnewton103
+*    Date: June 12th, 2019
+*    Availability: https://freesound.org/people/bnewton103/sounds/474474/
+*
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: splash_small.wav
+*    Author: InspectorJ
+*    Date: January 28th, 2018
+*    Availability: https://freesound.org/people/InspectorJ/sounds/416710/
+*
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: metal_hit.wav
+*    Author: jorickhoofd
+*    Date: June 30th, 2012
+*    Availability: https://freesound.org/people/jorickhoofd/sounds/160121/
+*
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: construction.wav
+*    Author: InspectorJ
+*    Date: October 27th, 2017
+*    Availability: https://freesound.org/people/InspectorJ/sounds/406048/
+*
+***************************************************************************************/

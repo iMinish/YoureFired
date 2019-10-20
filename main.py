@@ -4,19 +4,15 @@ totalAttackPlayer2 = 0
 totalAttackHuman = 0
 totalAttackAI = 0
 
-
 totalhitPlayer1 = 0
 totalhitPlayer2 = 0
 totalhitHuman = 0
 totalhitAI = 0
 
-
-
 totalMissedPlayer1 = 0
 totalMissedPlayer2 = 0
 totalMissedHuman = 0
 totalMissedAI = 0
-
 
 if __name__ == "__main__":
     import pygame
@@ -25,7 +21,6 @@ if __name__ == "__main__":
     from pygame.locals import *
     import random
     from boats import Boat
-    from executive import Executive
     from player import Player
     pygame.init()
 
@@ -53,6 +48,12 @@ if __name__ == "__main__":
     leftGrid = None
     rightGrid = None
 
+    #globals - sound effects
+    countdown_sound = pygame.mixer.Sound("countdown.wav")
+    miss_sound = pygame.mixer.Sound("splash_small.wav")
+    hit_sound = pygame.mixer.Sound("metal_hit.wav")
+    placement_sound = pygame.mixer.Sound("construction.wav")
+
     # variables used when gameState = "gamePlay"
     checkbox = pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
     toggled = False
@@ -68,7 +69,6 @@ if __name__ == "__main__":
     rects_hit2 = []
     opposing_ship2 = []
     my_ships2 = []
-    #game = Executive()
 
     board_cleared = True
 
@@ -88,45 +88,51 @@ if __name__ == "__main__":
     my_shipsHuman = []
 
 def quitGame():
-    """Closes the game window"""
-
+    """
+    Closes the game window
+    Args:
+    None
+    Returns:
+    None
+    """
     pygame.quit()
     quit()
 
 def event_handler():
-    """Checks for different pygame events"""
-
+    """
+    Checks for different pygame events
+    Args:
+    None
+    Returns:
+    None
+    """
     for event in pygame.event.get():
         if event.type == QUIT or (event.type == KEYDOWN and (event.key == K_ESCAPE or event.key == K_q)):
             quitGame()
 
-def isPointInRect(x, y, rect):
-    """Checks if a coordinate is within the bounds of a pygame.rect object
-
+def isPointInRect(x, y, rect): #CHECKS IF COORDINATE IS WITHIN RECTANGLE
+    """
+    Checks if a coordinate is within the bounds of a pygame.rect object
     Args:
     x (float): x coordinate to check
     y (float): y coordinate to check
     rect (pygame.Rect): object to see if x any y are in
-
     Returns:
-        bool: True if x and y are in rect, False otherwise
+    bool: True if x and y are in rect, False otherwise
     """
-
     if x < rect.x + rect.width and x > rect.x and y < rect.y + rect.height and y > rect.y:
-        return True
-    return False
+        return True # (x, y) is inside (rect.x, rect.y)
+    return False # (x, y) is NOT inside (rect.x, rect.y)
 
-def createRects(x, y):
-    """Creates an 8x8 grid of squares
-
+def createRects(x, y): #DRAWS THE BOARD
+    """
+    Creates an 8x8 grid of squares
     Args:
     x (int): the x position for the top right corner of the grid to start at
     y (int): the y position for the top right corner of the grid to start at
-
     Returns:
-        8x8 array of pygame.Rect objects
+    8x8 array of pygame.Rect objects
     """
-
     interval = (disp_width / 2) / 16
     divX = interval + x
     divY = interval + y
@@ -149,50 +155,71 @@ def createRects(x, y):
     pygame.display.update()
     return rects
 
+# CREATES A TEXT OBJECT
 def text_objects(text, font): #function used from https://pythonprogramming.net/pygame-start-menu-tutorial/
-    """Creates a text object
-
+    """
+    Creates a text object
     Args:
     text: the string to display
     font: the style of the text
+    Returns:
+    None
     """
-
     textSurface = font.render(text, True, (255, 255, 255))
     return textSurface, textSurface.get_rect()
 
-def showboat1(rects):
-    """Shows player 1's own boats after pressing the toggle button
-
+def showboat1(rects): #SHOWS PLAYER1'S BOATS
+    """
+    Shows player 1's own boats after pressing the toggle button
     Args:
     rects: (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
     """
-
     for i in range(0, 8):
         for j in range(0, 8):
-            if(i, j) in my_ships1:
+            if (i, j) in my_ships1:
                 pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
 
-def showboat2(rects):
-    """Shows player 2's own boats after pressing the toggle button
-
+def showboat2(rects): #SHOWS PLAYER2'S BOATS
+    """
+    Shows player 2's own boats after pressing the toggle button
     Args:
     rects: (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
     """
     for i in range(0, 8):
         for j in range(0, 8):
-            if(i, j) in my_ships2:
+            if (i, j) in my_ships2:
+                pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
+                pygame.display.update(rects[i][j])
+
+def showboatHuman(rects): #SHOWS PLAYER HUMAN'S BOATS
+    """
+    Shows player human's own boats after pressing the toggle button
+    Args:
+    rects: (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if(i, j) in my_shipsHuman:
                 pygame.draw.rect(disp, (0, 0, 0), rects[i][j])
                 pygame.display.update(rects[i][j])
 
 def trackRects1(rects):
-    """Tracks when a single square in a grid is pressed by the mouse for player 1
-
-    Args:
-        rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Tracks when a single square in a grid is pressed by the mouse for player 1
+    Args:
+    rects: (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -208,11 +235,16 @@ def trackRects1(rects):
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_ship1 and not (i, j) in rects_clicked1: #clicked on square containing ship
+                    hit_sound.play()
                     rects_hit1.append((i, j))
                     #print("in 1")
                     print("Player1 hit a ship!") #TESTER COMMENT
                     player2.addToHitList(i, j)
                     rects_clicked1.append((i, j))
+                    if player2.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 1"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -228,12 +260,10 @@ def trackRects1(rects):
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total hit update
                     totalhitPlayer1 = totalhitPlayer1 + 1
-                    if player2.shipsDestroyed() == numberOfBoats:
-                        winner = "Player 1"
-                        gameState = "winner"
-                        winState()
-                    setupGamePlay2() # Fixed fire until miss
+                    if(gameState != "winner"):
+                        setupGamePlay2()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked1: #clicked on a square and missed
+                    miss_sound.play()
                     rects_missed1.append((i, j))
                     #print("in 2")
                     print("Player1 missed!") #TESTER COMMENT
@@ -248,20 +278,23 @@ def trackRects1(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clicked1)
-                    setupGamePlay2() # Fixed fire until hit
                     #scoreboard total attacked update
                     totalAttackPlayer1 = totalAttackPlayer1 + 1
                     #scoreboard total missed update
                     totalMissedPlayer1 = totalMissedPlayer1 + 1
+                    if(gameState != "winner"):
+                        setupGamePlay2()
 
 def trackRects2(rects):
-    """Tracks when a single square in a grid is pressed by the mouse for player 2
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Tracks when a single square in a grid is pressed by the mouse for player 2
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -275,9 +308,14 @@ def trackRects2(rects):
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_ship2 and not (i, j) in rects_clicked2:
+                    hit_sound.play()
                     rects_hit2.append((i, j))
                     player1.addToHitList(i, j)
                     rects_clicked2.append((i, j))
+                    if player1.shipsDestroyed() == numberOfBoats:
+                        winner = "Player 2"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -293,12 +331,10 @@ def trackRects2(rects):
                     totalAttackPlayer2 = totalAttackPlayer2 + 1
                     #scoreboard total hit update
                     totalhitPlayer2 = totalhitPlayer2 + 1
-                    if player1.shipsDestroyed() == numberOfBoats:
-                        winner = "Player 2"
-                        gameState = "winner"
-                        winState()
-                    setupGamePlay1() # Fixed fire until miss
+                    if(gameState != "winner"):
+                        setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked2:
+                    miss_sound.play()
                     rects_missed2.append((i, j))
                     rects_clicked2.append((i, j))
                     pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
@@ -312,22 +348,25 @@ def trackRects2(rects):
                     pygame.display.update()
                     print(rects_clicked2)
                     pygame.time.delay(250)
-                    setupGamePlay1() # Fixed fire until hit
                     #scoreBoard total attacked update
                     totalAttackPlayer2 = totalAttackPlayer2 + 1
                     #scoreboard total missed update
                     totalMissedPlayer2 = totalMissedPlayer2 + 1
+                    if(gameState != "winner"):
+                        setupGamePlay1()
     elif pygame.mouse.get_pressed() != (1, 0, 0):
         newPress = True
 
 def trackRectsHuman(rects):
-    """Tracks when a single square in a grid is pressed by the mouse for player human
-
-    Args:
-        rects: (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Tracks when a single square in a grid is pressed by the mouse for player human
+    Args:
+    rects: (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -341,9 +380,14 @@ def trackRectsHuman(rects):
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_shipHuman and not (i, j) in rects_clickedHuman: #clicked on square containing ship
+                    hit_sound.play()
                     rects_hitHuman.append((i, j))
                     playerAI.addToHitList(i, j)
                     rects_clickedHuman.append((i, j))
+                    if playerAI.shipsDestroyed() == numberOfBoats:
+                        winner = "Player Human"
+                        gameState = "winner"
+                        winState()
                     pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
                     pygame.display.update(rects[i][j])
                     hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
@@ -359,12 +403,10 @@ def trackRectsHuman(rects):
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total hit update
                     totalhitHuman = totalhitHuman + 1
-                    if playerAI.shipsDestroyed() == numberOfBoats:
-                        winner = "Player Human"
-                        gameState = "winner"
-                        winState()
-                    setupGamePlayAI()
+                    if(gameState != "winner"):
+                        setupGamePlayAI()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clickedHuman: #clicked on a square and missed
+                    miss_sound.play()
                     rects_missedHuman.append((i, j))
                     print("in 2")
                     rects_clickedHuman.append((i, j))
@@ -378,21 +420,45 @@ def trackRectsHuman(rects):
                     disp.blit(hit_text_display, (480, 540))
                     pygame.display.update()
                     print(rects_clickedHuman)
-                    setupGamePlayAI()
                     #scoreBoard total attacked update
                     totalAttackHuman = totalAttackHuman + 1
                     #scoreBoard total Missed update
                     totalMissedHuman = totalMissedHuman + 1
+                    if(gameState != "winner"):
+                        setupGamePlayAI()
+
+def fireAdjacent(shipHitAI):
+    """
+    Fires UP, RIGHT, DOWN, LEFT from the most recent destroyed boat location
+    Args:
+    shipHitAI: shipHitAI is an array passed in with the current spot we want to hit
+    Returns:
+    None
+    """
+    #shipHitAI is an array passed in with the current spot we want to hit
+    for coord in reversed(shipHitAI):
+        print("in fireadj")
+        if(((coord[0]-1,coord[1]) not in rects_clickedAI) and (((coord[0]-1) >= 0) and ((coord[0]-1) <= 7))):
+            return coord[0]-1, coord[1]
+        elif(((coord[0],coord[1]+1) not in rects_clickedAI) and (((coord[1]+1) >= 0) and ((coord[1]+1) <= 7))):
+            return coord[0], coord[1]+1
+        elif(((coord[0]+1,coord[1]) not in rects_clickedAI) and (((coord[0]+1) >= 0) and ((coord[0]+1) <= 7))):
+            return coord[0]+1, coord[1]
+        elif(((coord[0],coord[1]-1) not in rects_clickedAI) and (((coord[1]-1) >= 0) and ((coord[1]-1) <= 7))):
+            return coord[0], coord[1]-1
+    #if all of these are misses, medium needs to fire at another ranodm spot then call this again after the random shit is fired
 
 def trackRectsAI(rects, difficulty):
-    """Allows the AI to fire
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
-        difficulty (string): difficulty setting for AI
     """
-
+    Allows the AI to fire
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    difficulty (string): difficulty setting for AI
+    Returns:
+    None
+    """
     global winner
+    global gameState
     newPress = True
     mouseX = 0
     mouseY = 0
@@ -400,129 +466,111 @@ def trackRectsAI(rects, difficulty):
     global totalAttackAI
     global totalhitAI
     global totalMissedAI
+    global shipHitsAI
 
     hit_text = pygame.font.SysFont('Consolas', 40)
 
-    if (difficulty == "easy"):
-        xCoord = random.randint(0, 7)
-        yCoord = random.randint(0, 7)
-        for i in range(0, 8):
-            for j in range(0, 8):
-                if (xCoord, yCoord) in opposing_ship2 and not (xCoord, yCoord) in rects_clicked2:
-                    rects_hit2.append((i, j))
-                    player1.addToHitList(i, j)
-                    rects_clicked2.append((i, j))
-                    pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
-                    pygame.display.update(rects[i][j])
-                    hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    pygame.time.delay(500)
-                    hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    print(rects_clickedAI)
-                    print("destroyed", playerAI.shipsDestroyed())
-                    #scoreBoard total attacked update
-                    totalAttackAI = totalAttackAI + 1
-                    #scoreBoard total hit update
-                    totalhitAI = totalhitAI + 1
-                    if playerHuman.shipsDestroyed() == numberOfBoats:
-                        winner = "Player AI"
-                        gameState = "winner"
-                        winState()
-                    setupGamePlay1()
-                elif not (xCoord, yCoord) in rects_clicked2:
-                    rects_missed2.append((i, j))
-                    rects_clicked2.append((i, j))
-                    pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
-                    pygame.display.update(rects[i][j])
-                    hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    pygame.time.delay(500)
-                    hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
-                    disp.blit(hit_text_display, (480, 540))
-                    pygame.display.update()
-                    print(rects_clickedAI)
-                    pygame.time.delay(250)
-                    setupGamePlayHuman()
-                    #scoreBoard total attacked update
-                    totalAttackAI = totalAttackAI + 1
-                    #scoreBoard total Missed update
-                    totalMissedAI = totalMissedAI + 1
-    elif (difficulty == "medium"):
-        if (not shipHitsAI):
-            xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
-            for i in range(0, 8):
-                for j in range(0, 8):
-                    if (xCoord, yCoord) in opposing_shipAI and not (xCoord, yCoord) in rects_clickedAI:
-                        rects_hitAI.append((i, j))
-                        playerHuman.addToHitList(i, j)
-                        rects_clickedAI.append((i, j))
-                        pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
-                        pygame.display.update(rects[i][j])
-                        hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
-                        disp.blit(hit_text_display, (480, 540))
-                        pygame.display.update()
-                        pygame.time.delay(500)
-                        hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
-                        disp.blit(hit_text_display, (480, 540))
-                        pygame.display.update()
-                        print(rects_clickedAI)
-                        print("destroyed", playerAI.shipsDestroyed())
-                        #scoreBoard total attacked update
-                        totalAttackAI = totalAttackAI + 1
-                        #scoreBoard total hit update
-                        totalhitAI = totalhitAI + 1
-                        if playerHuman.shipsDestroyed() == numberOfBoats:
-                            winner = "Player AI"
-                            gameState = "winner"
-                            winState()
-                        #if sunk, remove ship's coords from global shipList
-
-
-                        #else, add coord to global list
-                        setupGamePlayHuman()
-
-                    elif not (xCoord, yCoord) in rects_clickedAI:
-                        rects_missedAI.append((i, j))
-                        rects_clickedAI.append((i, j))
-                        pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
-                        pygame.display.update(rects[i][j])
-                        hit_text_display = hit_text.render("MISS!", False, (0, 0, 255))
-                        disp.blit(hit_text_display, (480, 540))
-                        pygame.display.update()
-                        pygame.time.delay(500)
-                        hit_text_display = hit_text.render("MISS!", False, (192, 192, 192))
-                        disp.blit(hit_text_display, (480, 540))
-                        pygame.display.update()
-                        print(rects_clickedAI)
-                        pygame.time.delay(250)
-                        setupGamePlayHuman()
-                        #scoreBoard total attacked update
-                        totalAttackAI= totalAttackAI + 1
-                        #scoreBoard total Missed update
-                        totalMissedAI = totalMissedAI + 1
+    if(difficulty == "easy"):
+        #generate coordinate:
+        xCoord = 0
+        yCoord = 0
+        goodCoord = 0
+        while (goodCoord == 0):
+            tempX = random.randint(0, 7)
+            tempY = random.randint(0, 7)
+            if((tempX, tempY) not in rects_clickedAI):
+                xCoord = tempX
+                yCoord = tempY
+                goodCoord = 1
+        if (xCoord, yCoord) in opposing_shipAI:
+            rects_hitAI.append((xCoord, yCoord))
+            playerHuman.addToHitList(xCoord,yCoord)
+            rects_clickedAI.append((xCoord, yCoord))
+            print(rects_clickedAI)
+            print("destroyed", playerAI.shipsDestroyed())
+            #scoreBoard total attacked update
+            totalAttackAI = totalAttackAI + 1
+            #scoreBoard total hit update
+            totalhitAI = totalhitAI + 1
+            if playerHuman.shipsDestroyed() == numberOfBoats:
+                winner = "Player AI"
+                gameState = "winner"
+                winState()
+            if(gameState != "winner"):
+                setupGamePlayHuman()
         else:
-            xCoord = random.randint(0, 8)
-            yCoord = random.randint(0, 8)
-            #if hit, add coordinate to global list
-    elif (difficulty == "hard"):
-        for (x, y) in opposing_ship2:
-            if (not (x, y) in rects_clickedAI):
-                rects_hit2.append((i, j))
+            rects_missedAI.append((xCoord, yCoord))
+            rects_clickedAI.append((xCoord, yCoord))
+            print(rects_clickedAI)
+            #scoreBoard total attacked update
+            totalAttackAI = totalAttackAI + 1
+            #scoreBoard total Missed update
+            totalMissedAI = totalMissedAI + 1
+            if (gameState != "winner"):
+                setupGamePlayHuman()
+
+    elif (difficulty == "medium"):
+        #generate coordinate:
+        if(shipHitsAI):
+            xCoord, yCoord = fireAdjacent(shipHitsAI) #NEED TO CREATE THIS FUNCTION STILL
+            print("will fire on")
+            print(xCoord)
+            print(yCoord)
+        else:
+            goodCoord = 0
+            while(goodCoord == 0):
+                tempX = random.randint(0, 7)
+                tempY = random.randint(0, 7)
+                if((tempX, tempY) not in rects_clickedAI):
+                    xCoord = tempX
+                    yCoord = tempY
+                    goodCoord = 1
+
+        if (xCoord, yCoord) in opposing_shipAI:
+            rects_hitAI.append((xCoord, yCoord))
+            playerHuman.addToHitList(xCoord, yCoord)
+            rects_clickedAI.append((xCoord, yCoord))
+            print(rects_clickedAI)
+            print("destroyed", playerAI.shipsDestroyed())
+            #scoreBoard total attacked update
+            totalAttackAI = totalAttackAI + 1
+            #scoreBoard total hit update
+            totalhitAI = totalhitAI + 1
+            if playerHuman.shipsDestroyed() == numberOfBoats:
+                winner = "Player AI"
+                gameState = "winner"
+                winState()
+            shipHitsAI.append((xCoord, yCoord))
+            #if sunk, remove ship's coords from global shipList
+            checkIfSunk = playerHuman.getShipList()
+            for currentShip in checkIfSunk:
+                shipsCoords = currentShip.getCoordinates()
+                if(currentShip.checkDestroyed() and ((xCoord,yCoord) in shipsCoords)): #CHECK
+                    for coord in shipsCoords:
+                        shipHitsAI.remove(coord) #CHECK
+            if(gameState != "winner"):
+                setupGamePlayHuman()
+
+        else:
+            rects_missedAI.append((xCoord, yCoord))
+            rects_clickedAI.append((xCoord, yCoord))
+            print(rects_clickedAI)
+            #scoreBoard total attacked update
+            totalAttackAI= totalAttackAI + 1
+            #scoreBoard total Missed update
+            totalMissedAI = totalMissedAI + 1
+            if (gameState != "winner"):
+                setupGamePlayHuman()
+
+    elif(difficulty == "hard"):
+        print("in hard mode") #testing purposes
+        cont = 1
+        for (i, j) in opposing_shipAI:
+            if(not (i, j) in rects_clickedAI):
+                print("inside line 553") #testing purposes
+                rects_hitAI.append((i, j))
                 playerHuman.addToHitList(i, j)
                 rects_clickedAI.append((i, j))
-                pygame.draw.rect(disp, (255, 0, 0), rects[i][j])
-                pygame.display.update(rects[i][j])
-                hit_text_display = hit_text.render("HIT!", False, (255, 0, 0))
-                disp.blit(hit_text_display, (480, 540))
-                pygame.display.update()
-                pygame.time.delay(500)
-                hit_text_display = hit_text.render("HIT!", False, (192, 192, 192))
-                disp.blit(hit_text_display, (480, 540))
-                pygame.display.update()
                 print(rects_clickedAI)
                 print("destroyed", playerAI.shipsDestroyed())
                 #scoreBoard total attacked update
@@ -533,19 +581,27 @@ def trackRectsAI(rects, difficulty):
                     winner = "Player AI"
                     gameState = "winner"
                     winState()
-                setupGamePlayHuman()
-
+                    cont = 0
+                    break
+                print("about to cont")
+                if(gameState != "winner"):
+                    setupGamePlayHuman()
+                cont = 0
+                break
+            if(cont == 0):
+                break
 
     elif pygame.mouse.get_pressed() != (1, 0, 0):
         newPress = True
 
 def printRects1(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Draws the squares on the board that have been hit or missed for player 1
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     for i in range(0, 8):
         for j in range(0, 8):
             if (i, j) in rects_hit1:
@@ -556,12 +612,13 @@ def printRects1(rects):
                 pygame.display.update(rects[i][j])
 
 def printRects2(rects):
-    """Draws the squares on the board that have been hit or missed for player 2
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Draws the squares on the board that have been hit or missed for player 2
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     for i in range(0, 8):
         for j in range(0, 8):
             if (i, j) in rects_hit2:
@@ -572,12 +629,13 @@ def printRects2(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsHuman(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Draws the squares on the board that have been hit or missed for player Human
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     for i in range(0, 8):
         for j in range(0, 8):
             if (i, j) in rects_hitHuman:
@@ -588,12 +646,13 @@ def printRectsHuman(rects):
                 pygame.display.update(rects[i][j])
 
 def printRectsAI(rects):
-    """Draws the squares on the board that have been hit or missed for player 1
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Draws the squares on the board that have been hit or missed for player AI
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    Returns:
+    None
+    """
     for i in range(0, 8):
         for j in range(0, 8):
             if (i, j) in rects_hitAI:
@@ -604,8 +663,13 @@ def printRectsAI(rects):
                 pygame.display.update(rects[i][j])
 
 def track_toggle():
-    """Tracks when the toggle square is pressed by the mouse"""
-
+    """
+    Tracks when the toggle square is pressed by the mouse
+    Args:
+    None
+    Returns:
+    None
+    """
     global toggled
     newPress = True
     mouseX = 0
@@ -630,24 +694,26 @@ def track_toggle():
         newPress = True
 
 def clear_board(rects):
-    """Clears the board of all squares - intended to be used after showing the players own boats
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): the grid to check on
     """
-
+    Clears the board of all squares - intended to be used after showing the players own boats
+    Args:
+    rects (8x8 array of pygame.Rect objects): the grid to check on
+    Rects:
+    None
+    """
     for i in range(0, 8):
         for j in range(0, 8):
             pygame.draw.rect(disp, (192, 192, 192), rects[i][j])
             pygame.display.update(rects[i][j])
 
 def trackPlacement(rects):
-    """ tracks the placement of boats on the placeBoats screens for player 1 and 2
-
-    Args:
-        rects (8x8 array of pygame.Rect objects): grid to check on
     """
-
+    Tracks the placement of boats on the placeBoats screens for player 1 and 2
+    Args:
+    rects (8x8 array of pygame.Rect objects): grid to check on
+    Returns:
+    None
+    """
     global turn
     global placeNumber
     global spotsToCheck
@@ -665,8 +731,8 @@ def trackPlacement(rects):
     global my_shipsAI
     newPress = True
     mouseX = 0
-
     mouseY = 0
+
     if pygame.mouse.get_pressed() == (1, 0, 0) and newPress:
         newPress = False
         mouseX, mouseY = pygame.mouse.get_pos()
@@ -700,17 +766,20 @@ def trackPlacement(rects):
             updateBoatToPlaceText(placeNumber)
             if gameState == "placeBoats1":
                 player1.placeShip(B)
+                placement_sound.play()
                 for i in range(len(B.getCoordinates())):
                     my_ships1.append(B.getCoordinates()[i])
                     opposing_ship2.append(B.getCoordinates()[i])
                 print("Myships", my_ships1)
             elif gameState == "placeBoats2":
                 player2.placeShip(B)
+                placement_sound.play()
                 for i in range(len(B.getCoordinates())):
                     my_ships2.append(B.getCoordinates()[i])
                     opposing_ship1.append(B.getCoordinates()[i])
             elif gameState == "placeBoatsHuman":
                 playerHuman.placeShip(B)
+                placement_sound.play()
                 for i in range(len(B.getCoordinates())):
                     my_shipsHuman.append(B.getCoordinates()[i])
                     opposing_shipAI.append(B.getCoordinates()[i])
@@ -733,7 +802,13 @@ def trackPlacement(rects):
         spotsToCheck = []
 
 def trackPlayButton(): #PLAY VS HUMAN
-    """ Tracks if the Play button on the welcome screen has been pressed. If it has, setupPlaceBoats(1) is called"""
+    """
+    Tracks if the Play button on the welcome screen has been pressed. If it has, setupPlaceBoats(1) is called
+    Args:
+    None
+    Returns:
+    None
+    """
     global gameState
 
     if pygame.mouse.get_pressed() == (1, 0, 0):
@@ -743,26 +818,36 @@ def trackPlayButton(): #PLAY VS HUMAN
             setupPlaceBoats(1)
 
 def trackPlayButton_AI(): #PLAY VS AI
-    """ Tracks if the PLAY VS AI button on the welcome screen has been pressed. If it has, ????????????????"""
+    """
+    Tracks if the PLAY VS AI button on the welcome screen has been pressed
+    Args:
+    None
+    Returns:
+    None
+    """
     global gameState
+    global difficulty
 
     if pygame.mouse.get_pressed() == (1, 0, 0):
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .08, disp_height * .55, 260, 75)) and not numberOfBoats == 0: # PLAY VS EASY AI
             print("PLAY VS EASY AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "easy"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .35, disp_height * .55, 330, 75)) and not numberOfBoats == 0: # PLAY VS MEDIUM AI
             print("PLAY VS MEDIUM AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "medium"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .7, disp_height * .55, 270, 75)) and not numberOfBoats == 0: # PLAY VS HARD AI
             print("PLAY VS HARD AI CLICKED\n")
-            setupPlaceBoats(1) # need to change to handle which AI we are playing against
+            difficulty = "hard"
+            setupPlaceBoatsHuman() # need to change to handle which AI we are playing against
 
 def getSize():
-    """Handles the user interface of selecting the size of the boats
-
+    """
+    Handles the user interface of selecting the size of the boats
     Args:
     None
     Returns:
@@ -872,10 +957,13 @@ def getSize():
 
     pygame.display.update()
 
-
 def trackQuitButton():
-    """ Tracks if the Quit button on the welcome screen has been pressed. If it has, quitGame() is called"""
-
+    """Tracks if the Quit button on the welcome screen has been pressed. If it has, quitGame() is called
+    Args:
+    None
+    Returns:
+    None
+    """
     if pygame.mouse.get_pressed() == (1, 0, 0):
         mouseX, mouseY = pygame.mouse.get_pos()
         if isPointInRect(mouseX, mouseY, pygame.Rect(disp_width * .45, disp_height * .68, 120, 75)):
@@ -883,13 +971,13 @@ def trackQuitButton():
             quitGame()
 
 def updateBoatToPlaceText(size):
-    """ Every time this is called, the text that says "Boat size to place..." on gameState = "placeBoats1"
-        or gameState = "placeBoats2" will get redrawn with the new size shown
-
-    Args:
-        size (int): should corresponds to size of current boat to place (e.g. global placeNumber)
     """
-
+    Every time this is called, the text that says "Boat size to place..." on gameState = "placeBoats1" or gameState = "placeBoats2" will get redrawn with the new size shown
+    Args:
+    size (int): should corresponds to size of current boat to place (e.g. global placeNumber)
+    Returns:
+    None
+    """
     disp.fill((192, 192, 192), (350, 150, 200, 40))
     pygame.draw.rect(disp, (192, 192, 192), (570, 150, 50, 50))
     pygame.display.update((350, 150, 200, 40))
@@ -899,14 +987,13 @@ def updateBoatToPlaceText(size):
     pygame.display.update()
 
 def showSwitchPlayers(originalTime):
-    """ Displays the screen that tells players to switch. Gives players three seconds to do so.
-
-    Args:
-        originalTime (pygame.time.get_ticks()): represents the original time (in systicks, represented as int)
-                                                that this method was called. It is used agains the current
-                                                time in systics to see if three seconds has passed
     """
-
+    Displays the screen that tells players to switch. Gives players three seconds to do so.
+    Args:
+    originalTime (pygame.time.get_ticks()): represents the original time (in systicks, represented as int) that this method was called. It is used agains the current time in systics to see if three seconds has passed
+    Returns:
+    None
+    """
     global placeNumber
     global gameState
 
@@ -918,22 +1005,28 @@ def showSwitchPlayers(originalTime):
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (300, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     setupPlaceBoats(2)
 
 def setupWelcome():
-    """ Sets up initial graphics and variables for the welcome state """
-
+    """
+    Sets up initial graphics and variables for the welcome state
+    Args:
+    None
+    Returns:
+    None
+    """
     l_blue = (80, 171, 250)
     white = (255, 255, 255)
     black = (0, 0, 0)
@@ -954,14 +1047,14 @@ def setupWelcome():
     TextSurf2, TextRect2 = text_objects("PLAY VS HUMAN", medText)
     TextRect2.center = ((disp_width / 2), (disp_height / 2))
 
-    TextSurf6, TextRect6 = text_objects("VS EASY AI", medText) # new code - rob
-    TextRect6.center = ((disp_width * .2), (disp_height * .6)) # new code - rob
+    TextSurf6, TextRect6 = text_objects("VS EASY AI", medText)
+    TextRect6.center = ((disp_width * .2), (disp_height * .6))
 
-    TextSurf7, TextRect7 = text_objects("VS MEDIUM AI", medText) # new code - rob
-    TextRect7.center = ((disp_width * .5), (disp_height * .6)) # new code - rob
+    TextSurf7, TextRect7 = text_objects("VS MEDIUM AI", medText)
+    TextRect7.center = ((disp_width * .5), (disp_height * .6))
 
-    TextSurf8, TextRect8 = text_objects("VS HARD AI", medText) # new code - rob
-    TextRect8.center = ((disp_width * .82), (disp_height * .6)) # new code - rob
+    TextSurf8, TextRect8 = text_objects("VS HARD AI", medText)
+    TextRect8.center = ((disp_width * .82), (disp_height * .6))
 
     TextSurf3, TextRect3 = text_objects("QUIT", medText)
     TextRect3.center = ((disp_width / 2), (disp_height * .75))
@@ -1000,12 +1093,13 @@ def setupWelcome():
     pygame.display.update()
 
 def setupPlaceBoats(whichPlayer):
-    """ Sets up initial graphics and variables for the placeBoats state
-
-    Args:
-        whichPlayer (int): 1 -> setup the placeBoats state for player 1, 2 -> setup the placeBoates satate for player 2
     """
-
+    Sets up initial graphics and variables for the placeBoats state
+    Args:
+    whichPlayer (int): 1 -> setup the placeBoats state for player 1, 2 -> setup the placeBoates satate for player 2
+    Returns:
+    None
+    """
     global gameState
     global grid
     global placeNumber
@@ -1028,12 +1122,13 @@ def setupPlaceBoats(whichPlayer):
     gameState = "placeBoats" + str(whichPlayer)
 
 def setupPlaceBoatsHuman():
-    """ Sets up initial graphics and variables for the placeBoats state for Human in human vs AI
-
-    Args:
-        None
     """
-
+    Sets up initial graphics and variables for the placeBoats state for Human in human vs AI
+    Args:
+    None
+    Returns:
+    None
+    """
     global gameState
     global grid
     global placeNumber
@@ -1056,7 +1151,17 @@ def setupPlaceBoatsHuman():
     gameState = "placeBoatsHuman"
 
 def setupPlaceBoatsAI():
+    """
+    Sets up initial graphics and variables for the placeBoats state for AI in human vs AI
+    Args:
+    None
+    Returns:
+    None
+    """
     #places AI boats
+    global my_shipsAI
+    global opposing_shipHuman
+    global playerAI
     for i in range(1,numberOfBoats+1):
         B = Boat()
         goodCoords = 0
@@ -1064,44 +1169,58 @@ def setupPlaceBoatsAI():
             overlap = False
             spotsToCheck = []
             spotsToCheck = generateBoatLocation(i)
-            for i in range(len(spotsToCheck)):
-                if spotsToCheck[i] in playerAI.getCoordinateList():
+            for x in range(len(spotsToCheck)):
+                if spotsToCheck[x] in playerAI.getCoordinateList():
                     overlap = True
             if (overlap == False):
                 goodCoords = 1
 
         if B.validPlace(spotsToCheck) and overlap == False:
             print("Boat Placed")
-            if gameState == "placeBoatsHuman":
+            if gameState == "None":
                 playerAI.placeShip(B)
-                for i in range(len(B.getCoordinates())):
-                    my_shipsAI.append(B.getCoordinates()[i])
-                    opposing_shipHuman.append(B.getCoordinates()[i])
+                print("AI ship at") #testing
+                print(B.getCoordinates()) #testing
+                for x in range(len(B.getCoordinates())):
+                    my_shipsAI.append(B.getCoordinates()[x])
+                    opposing_shipHuman.append(B.getCoordinates()[x])
 
 def generateBoatLocation(boatLength):
+    """
+    Genereates a random location to place player AI's boats
+    Args:
+    boatLength: length of boat to be placed
+    Returns:
+    None
+    """
     #helper function for placing AI boats
     boatDirection = random.randint(0,1)
     returnCoords = []
-    if (boatDirection == 0): #generate vertical coordinates
+    if(boatDirection == 0): #generate vertical coordinates
         bottomCoord = random.randint(boatLength - 1,7)
         colCoord = random.randint(0,7)
         returnCoords.append((bottomCoord,colCoord))
-        if (boatLength > 1):
+        if(boatLength > 1):
             for x in range(1,boatLength): #CHECK
                 returnCoords.append((bottomCoord-x,colCoord))
         return returnCoords
-    elif (boatDirection == 1): #generate horizontal getCoordinates
+    elif(boatDirection == 1): #generate horizontal getCoordinates
         rowCoord = random.randint(0,7)
         rightCoord = random.randint(boatLength - 1,7)
         returnCoords.append((rowCoord,rightCoord))
-        if (boatLength > 1):
+        if(boatLength > 1):
             for x in range(1,boatLength):
                 returnCoords.append((rowCoord,rightCoord-x))
         return returnCoords
 
 def setupGamePlay1():
-    """ Sets up initial graphics and variables for the gamePlay state """
-
+    """
+    Sets up initial graphics and variables for the gamePlay state
+    Args:
+    None
+    Returns:
+    None
+    """
     global leftGrid
     global rightGrid
     global gameState
@@ -1120,16 +1239,17 @@ def setupGamePlay1():
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     disp.fill((192, 192, 192))
     player_turn_display = player_turn.render("Player 1's Turn", False, (0, 0, 0))
@@ -1146,8 +1266,13 @@ def setupGamePlay1():
     gameState = "gamePlay1"
 
 def setupGamePlay2():
-    """ Sets up initial graphics and variables for the gamePlay state """
-
+    """
+    Sets up initial graphics and variables for the gamePlay state
+    Args:
+    None
+    Returns:
+    None
+    """
     global leftGrid
     global rightGrid
     global gameState
@@ -1166,16 +1291,17 @@ def setupGamePlay2():
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     disp.fill((192, 192, 192))
     player_turn_display = player_turn.render("Player 2's Turn", False, (0, 0, 0))
@@ -1192,8 +1318,13 @@ def setupGamePlay2():
     gameState = "gamePlay2"
 
 def setupGamePlayHuman():
-    """ Sets up initial graphics and variables for the gamePlay state """
-
+    """
+    Sets up initial graphics and variables for the gamePlay state
+    Args:
+    None
+    Returns:
+    None
+    """
     global leftGrid
     global rightGrid
     global gameState
@@ -1207,21 +1338,23 @@ def setupGamePlayHuman():
 
     player_switch = pygame.font.SysFont('Consolas', 40)
     player_switch_display = player_switch.render("Player Human's Turn in ", False, (0, 0, 0))
+
     count3 = player_switch.render("3", False, (0, 0, 0))
     count2 = player_switch.render("2", False, (0, 0, 0))
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     disp.fill((192, 192, 192))
     player_turn_display = player_turn.render("Player Human's Turn", False, (0, 0, 0))
@@ -1235,19 +1368,36 @@ def setupGamePlayHuman():
     disp.blit(toggle_display, (548, 200))
     leftGrid = createRects(200, 200)
     rightGrid = createRects(500, 200)
+    print("game state becoming human") #testing
     gameState = "gamePlayHuman"
 
 def setupGamePlayAI():
-    #todo
+    """
+    Sets gameState to be gamePlayAI
+    Args:
+    None
+    Returns:
+    None
+    """
+    global gameState
+    gameState = "gamePlayAI"
 
 def winState():
-    """ Lets the player know that they won """
+    """
+    Lets the player know that they won
+    Args:
+    None
+    Returns:
+    None
+    """
     l_blue = (80, 171, 250)
     white = (255, 255, 255)
     black = (0, 0, 0)
     disp.fill(l_blue)
+
     #Display the Winner of the game
 
+    ########### PLAYER 1 VS PLAYER 2 ############
     if(winner == "Player 1" or winner == "Player 2"):
         largeText = pygame.font.Font('freesansbold.ttf', 65)
         text = winner + " wins!"
@@ -1276,25 +1426,39 @@ def winState():
         #pygame.display.update() # updates pygame window
         gameState = "winner"
 
+        if(totalAttackPlayer1 > 0):
+            hit1 = ((totalhitPlayer1 / totalAttackPlayer1) * 100)
+            hit1Percentage = round(hit1, 2)
+            missed1 = ((totalMissedPlayer1 / totalAttackPlayer1) * 100)
+            missed1Percentage = round(missed1, 2)
 
-        hit1 = ((totalhitPlayer1 / totalAttackPlayer1) * 100)
-        hit1Percentage = round(hit1, 2)
-        missed1 = ((totalMissedPlayer1 / totalAttackPlayer1) * 100)
-        missed1Percentage = round(missed1, 2)
+            text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
+        else:
+            text_Player1_Hit = "Hit in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 1.3), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 1.3), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            pygame.display.update() # updates pygame window
+            gameState = "winner"
 
 
 
@@ -1348,6 +1512,8 @@ def winState():
             pygame.display.update() # updates pygame window
             gameState = "winner"
 
+    ############ HUMAN VS AI ############
+
     if(winner == "Player Human" or winner == "Player AI"):
         largeText = pygame.font.Font('freesansbold.ttf', 65)
         text = winner + " wins!"
@@ -1357,7 +1523,7 @@ def winState():
         #pygame.display.update()
         gameState = "winner"
 
-
+        
         #Score board for Player Human
         largeText_2 = pygame.font.Font('freesansbold.ttf', 53)
         text_Player1 = "Player Human"
@@ -1376,25 +1542,40 @@ def winState():
         #pygame.display.update() # updates pygame window
         gameState = "winner"
 
+        if(totalAttackHuman > 0):
+            hit1 = ((totalhitHuman / totalAttackHuman) * 100)
+            hit1Percentage = round(hit1, 2)
+            missed1 = ((totalMissedHuman / totalAttackHuman) * 100)
+            missed1Percentage = round(missed1, 2)
 
-        hit1 = ((totalhitHuman / totalAttackHuman) * 100)
-        hit1Percentage = round(hit1, 2)
-        missed1 = ((totalMissedHuman / totalAttackHuman) * 100)
-        missed1Percentage = round(missed1, 2)
+            text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Hit = "Hit in %: " + str(hit1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
+        else:
+            text_Player1_Hit = "Hit in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Hit, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .65)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
 
-        text_Player1_Miss = "Missed in %: " + str(missed1Percentage)
-        TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
-        TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
-        disp.blit(TextSurf, TextRect)
-        #pygame.display.update() # updates pygame window
-        gameState = "winner"
+            text_Player1_Miss = "Missed in %: " + "none"
+            TextSurf, TextRect = text_objects(text_Player1_Miss, largeTextForScore) #creates text surface variable and text rectangle variable
+            TextRect.center = ((disp_width / 4), (disp_height * .75)) # modifies the center of text rectangle based on pygame GUI window
+            disp.blit(TextSurf, TextRect)
+            #pygame.display.update() # updates pygame window
+            gameState = "winner"
+
 
 
 
@@ -1415,9 +1596,9 @@ def winState():
         gameState = "winner"
 
         if(totalAttackAI > 0):
-            hit2 = ((totalhitPlayer2 / totalAttackAI) * 100)
+            hit2 = ((totalhitAI / totalAttackAI) * 100)
             hit2Percentage = round(hit2, 2)
-            missed2 = ((totalMissedPlayer2 / totalAttackAI) * 100)
+            missed2 = ((totalMissedAI / totalAttackAI) * 100)
             missed2Percentage = round(missed2, 2)
 
             text_Player2_Hit = "Hit in %: " + str(hit2Percentage)
@@ -1469,6 +1650,7 @@ if __name__ == "__main__":
             else:
                 gameState = "None"
                 turn +=1
+                pygame.time.delay(500) #delay added to prevent sound effect overlap
                 showSwitchPlayers(pygame.time.get_ticks())
 
         elif gameState == "placeBoats2":
@@ -1476,6 +1658,7 @@ if __name__ == "__main__":
                 trackPlacement(grid)
             else:
                 gameState = "None"
+                pygame.time.delay(500) #delay added to prevent sound effect overlap
                 setupGamePlay1()
 
         elif gameState == "placeBoatsHuman":
@@ -1483,6 +1666,7 @@ if __name__ == "__main__":
                 trackPlacement(grid)
             else:
                 gameState = "None"
+                pygame.time.delay(500) #delay added to prevent sound effect overlap
                 turn +=1
                 setupPlaceBoatsAI()
                 setupGamePlayHuman()
@@ -1557,7 +1741,47 @@ if __name__ == "__main__":
                 rightGrid = createRects(500, 200)
                 board_cleared = True
         elif gameState == "gamePlayHuman":
-            #todo
+            if playerAI.shipsDestroyed() == num_destroyed:
+                winner = "Player Human"
+                gameState = "winner"
+                winState()
+            printRectsHuman(leftGrid)
+            printRectsAI(rightGrid)
+            trackRectsHuman(leftGrid)
+            track_toggle()
+
+            sunk_text = pygame.font.SysFont('Consolas', 30)
+            sunk_text_display = sunk_text.render("Battleboats you've sunk:", False, (0, 0, 0))
+            disp.blit(sunk_text_display, (340, 590))
+            pygame.display.update()
+            largeText = pygame.font.Font('freesansbold.ttf', 30)
+            i = 0
+            for index in range(0,numberOfBoats):
+                if playerAI.getShip(index).checkDestroyed():
+                    num = largeText.render("1x" + str(index + 1), False, (255, 0, 0))
+                    disp.blit(num, ((disp_width * .34 + i), (disp_height * .90)))
+                    pygame.display.update()
+                else:
+                    destroyed_num = largeText.render("1x" + str(index + 1), False, (255, 255, 255))
+                    disp.blit(destroyed_num, ((disp_width * .34 + i), (disp_height * .90)))
+                    pygame.display.update()
+                i = i + 87
+
+            if toggled and board_cleared:
+                showboatHuman(rightGrid) #working
+                board_cleared = False
+            if not toggled and not board_cleared:
+                clear_board(rightGrid)
+                rightGrid = createRects(500, 200)
+                board_cleared = True
+        elif gameState == "gamePlayAI":
+            if playerHuman.shipsDestroyed() == num_destroyed:
+                winner = "Player AI"
+                gameState = "winner"
+                winState()
+            print("callingTrackRectsAI") #for testing
+            trackRectsAI(leftGrid, difficulty)
+
         elif gameState == "winner":
             winState()
         clock.tick(30)
