@@ -48,6 +48,12 @@ if __name__ == "__main__":
     leftGrid = None
     rightGrid = None
 
+    #globals - sound effects
+    countdown_sound = pygame.mixer.Sound("countdown.wav")
+    miss_sound = pygame.mixer.Sound("splash_small.wav")
+    hit_sound = pygame.mixer.Sound("metal_hit.wav")
+    placement_sound = pygame.mixer.Sound("construction.wav")
+
     # variables used when gameState = "gamePlay"
     checkbox = pygame.draw.rect(disp, (255, 255, 255), (533, 200, 15, 15))
     toggled = False
@@ -229,6 +235,7 @@ def trackRects1(rects):
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_ship1 and not (i, j) in rects_clicked1: #clicked on square containing ship
+                    hit_sound.play()
                     rects_hit1.append((i, j))
                     #print("in 1")
                     print("Player1 hit a ship!") #TESTER COMMENT
@@ -256,6 +263,7 @@ def trackRects1(rects):
                     if(gameState != "winner"):
                         setupGamePlay2()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked1: #clicked on a square and missed
+                    miss_sound.play()
                     rects_missed1.append((i, j))
                     #print("in 2")
                     print("Player1 missed!") #TESTER COMMENT
@@ -300,6 +308,7 @@ def trackRects2(rects):
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_ship2 and not (i, j) in rects_clicked2:
+                    hit_sound.play()
                     rects_hit2.append((i, j))
                     player1.addToHitList(i, j)
                     rects_clicked2.append((i, j))
@@ -325,6 +334,7 @@ def trackRects2(rects):
                     if(gameState != "winner"):
                         setupGamePlay1() # Fixed fire until miss
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clicked2:
+                    miss_sound.play()
                     rects_missed2.append((i, j))
                     rects_clicked2.append((i, j))
                     pygame.draw.rect(disp, (0, 0, 255), rects[i][j])
@@ -370,6 +380,7 @@ def trackRectsHuman(rects):
         for i in range(0, 8):
             for j in range(0, 8):
                 if isPointInRect(mouseX, mouseY, rects[i][j]) and (i, j) in opposing_shipHuman and not (i, j) in rects_clickedHuman: #clicked on square containing ship
+                    hit_sound.play()
                     rects_hitHuman.append((i, j))
                     playerAI.addToHitList(i, j)
                     rects_clickedHuman.append((i, j))
@@ -395,6 +406,7 @@ def trackRectsHuman(rects):
                     if(gameState != "winner"):
                         setupGamePlayAI()
                 elif isPointInRect(mouseX, mouseY, rects[i][j]) and not (i, j) in rects_clickedHuman: #clicked on a square and missed
+                    miss_sound.play()
                     rects_missedHuman.append((i, j))
                     print("in 2")
                     rects_clickedHuman.append((i, j))
@@ -754,17 +766,20 @@ def trackPlacement(rects):
             updateBoatToPlaceText(placeNumber)
             if gameState == "placeBoats1":
                 player1.placeShip(B)
+                placement_sound.play()
                 for i in range(len(B.getCoordinates())):
                     my_ships1.append(B.getCoordinates()[i])
                     opposing_ship2.append(B.getCoordinates()[i])
                 print("Myships", my_ships1)
             elif gameState == "placeBoats2":
                 player2.placeShip(B)
+                placement_sound.play()
                 for i in range(len(B.getCoordinates())):
                     my_ships2.append(B.getCoordinates()[i])
                     opposing_ship1.append(B.getCoordinates()[i])
             elif gameState == "placeBoatsHuman":
                 playerHuman.placeShip(B)
+                placement_sound.play()
                 for i in range(len(B.getCoordinates())):
                     my_shipsHuman.append(B.getCoordinates()[i])
                     opposing_shipAI.append(B.getCoordinates()[i])
@@ -990,16 +1005,17 @@ def showSwitchPlayers(originalTime):
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (300, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     setupPlaceBoats(2)
 
@@ -1223,16 +1239,17 @@ def setupGamePlay1():
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     disp.fill((192, 192, 192))
     player_turn_display = player_turn.render("Player 1's Turn", False, (0, 0, 0))
@@ -1274,16 +1291,17 @@ def setupGamePlay2():
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     disp.fill((192, 192, 192))
     player_turn_display = player_turn.render("Player 2's Turn", False, (0, 0, 0))
@@ -1320,21 +1338,23 @@ def setupGamePlayHuman():
 
     player_switch = pygame.font.SysFont('Consolas', 40)
     player_switch_display = player_switch.render("Player Human's Turn in ", False, (0, 0, 0))
+
     count3 = player_switch.render("3", False, (0, 0, 0))
     count2 = player_switch.render("2", False, (0, 0, 0))
     count1 = player_switch.render("1", False, (0, 0, 0))
     disp.blit(player_switch_display, (320, 100))
     pygame.display.update()
-    pygame.time.delay(500)
+    countdown_sound.play()
+    pygame.time.delay(650)
     disp.blit(count3, (500, 150))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count2, (500, 200))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
     disp.blit(count1, (500, 250))
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(650)
 
     disp.fill((192, 192, 192))
     player_turn_display = player_turn.render("Player Human's Turn", False, (0, 0, 0))
@@ -1374,6 +1394,7 @@ def winState():
     white = (255, 255, 255)
     black = (0, 0, 0)
     disp.fill(l_blue)
+
     #Display the Winner of the game
 
     ########### PLAYER 1 VS PLAYER 2 ############
@@ -1629,6 +1650,7 @@ if __name__ == "__main__":
             else:
                 gameState = "None"
                 turn +=1
+                pygame.time.delay(500) #delay added to prevent sound effect overlap
                 showSwitchPlayers(pygame.time.get_ticks())
 
         elif gameState == "placeBoats2":
@@ -1636,6 +1658,7 @@ if __name__ == "__main__":
                 trackPlacement(grid)
             else:
                 gameState = "None"
+                pygame.time.delay(500) #delay added to prevent sound effect overlap
                 setupGamePlay1()
 
         elif gameState == "placeBoatsHuman":
@@ -1643,6 +1666,7 @@ if __name__ == "__main__":
                 trackPlacement(grid)
             else:
                 gameState = "None"
+                pygame.time.delay(500) #delay added to prevent sound effect overlap
                 turn +=1
                 setupPlaceBoatsAI()
                 setupGamePlayHuman()
